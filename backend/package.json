@@ -1,54 +1,59 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "server for NoteX",
-  "keywords": [
-    "NoteX",
-    "note",
-    "revision"
-  ],
-  "homepage": "https://github.com/subarnasaikia/NoteX#readme",
-  "bugs": {
-    "url": "https://github.com/subarnasaikia/NoteX/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/subarnasaikia/NoteX.git"
-  },
-  "license": "MIT",
-  "author": "Subarna Saikia",
-  "type": "module",
-  "main": "src/index.ts",
-  "scripts": {
-    "dev": "nodemon -r dotenv/config src/index.ts",
-    "format": "prettier --write ."
-  },
-  "dependencies": {
-    "bcrypt": "^5.1.1",
-    "cloudinary": "^2.6.0",
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.13.2",
-    "mongoose-aggregate-paginate-v2": "^1.1.4",
-    "multer": "^1.4.5-lts.2"
-  },
-  "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
-    "@types/cookie-parser": "^1.4.8",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.1",
-    "@types/jsonwebtoken": "^9.0.9",
-    "@types/mongoose": "^5.11.96",
-    "@types/multer": "^1.4.12",
-    "@types/node": "^22.14.1",
-    "eslint": "^9.25.1",
-    "eslint-config-prettier": "^10.1.2",
-    "nodemon": "^3.1.9",
-    "prettier": "^3.5.3",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.8.3"
-  }
+    "name": "backend",
+    "version": "1.0.0",
+    "description": "server for NoteX",
+    "keywords": [
+        "NoteX",
+        "note",
+        "revision"
+    ],
+    "homepage": "https://github.com/subarnasaikia/NoteX#readme",
+    "bugs": {
+        "url": "https://github.com/subarnasaikia/NoteX/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/subarnasaikia/NoteX.git"
+    },
+    "license": "MIT",
+    "author": "Subarna Saikia",
+    "type": "module",
+    "main": "src/index.ts",
+    "scripts": {
+        "build": "tsc",
+        "start": "node dist/index.js",
+        "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+        "format": "prettier --write .",
+        "lint": "eslint 'src/**/*.ts'"
+    },
+    "dependencies": {
+        "bcrypt": "^5.1.1",
+        "cloudinary": "^2.6.0",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.5",
+        "dotenv": "^16.5.0",
+        "express": "^5.1.0",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.13.2",
+        "mongoose-aggregate-paginate-v2": "^1.1.4",
+        "multer": "^1.4.5-lts.2"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.25.1",
+        "@types/bcrypt": "^5.0.2",
+        "@types/cookie-parser": "^1.4.8",
+        "@types/cors": "^2.8.17",
+        "@types/express": "^5.0.1",
+        "@types/jsonwebtoken": "^9.0.9",
+        "@types/mongoose": "^5.11.96",
+        "@types/multer": "^1.4.12",
+        "@types/node": "^22.14.1",
+        "eslint": "^9.25.1",
+        "eslint-config-prettier": "^10.1.2",
+        "nodemon": "^3.1.9",
+        "prettier": "^3.5.3",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.8.3",
+        "typescript-eslint": "^8.31.0"
+    }
 }
