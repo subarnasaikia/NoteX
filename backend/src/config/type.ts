@@ -1,6 +1,7 @@
 export type AppConfig = {
     server: {
         port: number;
+        node_env: string;
         cors_origin: string;
     };
     database: {

@@ -8,6 +8,7 @@ export const loadConfig = (): AppConfig => {
     return {
         server: {
             port: Number(getEnv("PORT", 3000)),
+            node_env: getEnv("NODE_ENV", "development"),
             cors_origin: getEnv("CORS_ORIGIN"),
         },
         database: {

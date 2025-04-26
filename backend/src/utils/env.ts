@@ -1,5 +1,6 @@
 export type Environment = {
     PORT: number;
+    NODE_ENV: string;
     CORS_ORIGIN: string;
     MONGODB_URI: string;
     ACCESS_TOKEN_SECRET: string;
