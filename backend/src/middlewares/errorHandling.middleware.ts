@@ -8,16 +8,25 @@ export const errorHandler = (
     res: Response,
     _next: NextFunction,
 ): void => {
-    const statusCode: number =
-        (err instanceof ApiError && err.statusCode) || 500;
-    const message: string = err.message || "Interenal Serve Error";
-    const errors: string[] = (err instanceof ApiError && err.errors) || [];
-    const stack: string | undefined =
-        loadConfig().server.node_env === "development" ? err.stack : undefined;
-    res.status(statusCode).json({
-        success: false,
-        message,
-        errors,
-        stack,
-    });
+    if (err instanceof ApiError) {
+        res.status(err.statusCode).json({
+            success: err.success,
+            message: err.message,
+            errors: err.errors,
+            stack:
+                loadConfig().server.node_env === "development"
+                    ? err.stack
+                    : undefined,
+        });
+    } else {
+        res.status(500).json({
+            success: false,
+            message: err.message || "Internal Server Error",
+            errors: [],
+            stack:
+                loadConfig().server.node_env === "development"
+                    ? err.stack
+                    : undefined,
+        });
+    }
 };
