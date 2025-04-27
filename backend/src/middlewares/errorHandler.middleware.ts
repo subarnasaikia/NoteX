@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { ApiError } from "../utils/ApiError";
-import { loadConfig } from "../config/loadConfig";
+import { ApiError } from "../utils/ApiError.js";
+import { loadConfig } from "../config/loadConfig.js";
 
 export const errorHandler = (
     err: ApiError | Error,

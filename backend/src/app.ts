@@ -1,11 +1,11 @@
-import express from "express";
+import express, { Application } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { errorHandler } from "./middlewares/errorHandler.middleware";
-import { loadConfig } from "./config/loadConfig";
-import { AppConfig } from "./config/type";
+import { errorHandler } from "./middlewares/errorHandler.middleware.js";
+import { loadConfig } from "./config/loadConfig.js";
+import { AppConfig } from "./config/type.js";
 
-const app = express();
+const app: Application = express();
 const config: AppConfig = loadConfig();
 
 // Initialize the middlewares

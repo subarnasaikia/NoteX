@@ -1,6 +1,6 @@
-import { loadConfig } from "./config/loadConfig";
-import { app } from "./app";
-import { AppConfig } from "./config/type";
+import { loadConfig } from "./config/loadConfig.js";
+import { app } from "./app.js";
+import { AppConfig } from "./config/type.js";
 
 const config: AppConfig = loadConfig();
 
