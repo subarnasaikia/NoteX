@@ -1,12 +1,14 @@
+import { StringValue } from "ms";
+
 export type Environment = {
     PORT: number;
     NODE_ENV: string;
     CORS_ORIGIN: string;
     MONGODB_URI: string;
     ACCESS_TOKEN_SECRET: string;
-    ACCESS_TOKEN_EXPIRY: string;
+    ACCESS_TOKEN_EXPIRY: StringValue;
     REFRESH_TOKEN_SECRET: string;
-    REFRESH_TOKEN_EXPIRY: string;
+    REFRESH_TOKEN_EXPIRY: StringValue;
     CLOUDINARY_CLOUD_NAME: string;
     CLOUDINARY_API_KEY: string;
     CLOUDINARY_API_SECRET: string;
@@ -25,7 +27,7 @@ export const getEnv = <K extends keyof Environment>(
         if (fallback) {
             return fallback;
         }
-        throw new Error(`Missing evvironment variable: ${key}.`);
+        throw new Error(`Missing environment variable: ${key}.`);
     }
     return value;
 };
