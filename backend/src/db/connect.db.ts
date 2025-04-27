@@ -4,12 +4,12 @@ import { loadConfig } from "../config/loadConfig.js";
 import { AppConfig } from "../config/type.js";
 import { ApiError } from "../utils/ApiError.js";
 
-const config: AppConfig = loadConfig();
+const envConfig: AppConfig = loadConfig();
 
 const connectDB = async (): Promise<void> => {
     try {
         const connectionInstance: Mongoose = await mongoose.connect(
-            `${config.database.mongodb_uri}/${DB_NAME}`,
+            `${envConfig.database.mongodb_uri}/${DB_NAME}`,
             {} as ConnectOptions,
         );
 

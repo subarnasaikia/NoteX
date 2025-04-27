@@ -3,7 +3,7 @@ import { AppConfig } from "./config/type.js";
 import { app } from "./app.js";
 import { connectDB } from "./db/connect.db.js";
 
-const config: AppConfig = loadConfig();
+const envConfig: AppConfig = loadConfig();
 
 connectDB()
     .then(() => {
@@ -11,8 +11,8 @@ connectDB()
             console.error("server error: ", error);
             process.exit(1);
         });
-        app.listen(config.server.port, () => {
-            console.log(`Server is running on port ${config.server.port}`);
+        app.listen(envConfig.server.port, () => {
+            console.log(`Server is running on port ${envConfig.server.port}`);
         });
     })
     .catch((error) => {

@@ -6,13 +6,13 @@ import { loadConfig } from "./config/loadConfig.js";
 import { AppConfig } from "./config/type.js";
 
 const app: Application = express();
-const config: AppConfig = loadConfig();
+const envConfig: AppConfig = loadConfig();
 
 // Initialize the middlewares
 
 app.use(
     cors({
-        origin: config.server.cors_origin,
+        origin: envConfig.server.cors_origin,
         credentials: true,
     }),
 );
