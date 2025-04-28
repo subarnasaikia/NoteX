@@ -38,7 +38,7 @@ export interface IUser extends Document {
     // Instance methods
     isPasswordCorrect(password: string): Promise<boolean>;
     generateAccessToken(): string;
-    generateRrefreshToken(): string;
+    generateRefreshToken(): string;
 }
 
 // Schema for subSchema
@@ -164,7 +164,7 @@ userSchema.methods.generateAccessToken = function (this: IUser): string {
 };
 
 // methods to generate refresh token using jwt
-userSchema.methods.generateRrefreshToken = function (this: IUser): string {
+userSchema.methods.generateRefreshToken = function (this: IUser): string {
     const secret_token: string = envConfig.jwt.refresh_token_secret;
     const expiry: StringValue = envConfig.jwt.refresh_token_expiry;
     if (!secret_token || secret_token.length === 0) {
