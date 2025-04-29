@@ -31,6 +31,10 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 // Route imoprting and declaring.
+import userRouter from "./routes/user.route.js";
+
+// routes declariation
+app.use("/api/v1/user", userRouter);
 
 // Global errorHandler always be at the end of the file.
 app.use(errorHandler);
