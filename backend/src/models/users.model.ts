@@ -1,6 +1,6 @@
 import { loadConfig } from "../config/loadConfig.js";
 import { AppConfig } from "../config/type.js";
-import mongoose, { Schema, Document, Model } from "mongoose";
+import mongoose, { Schema, Document, Model, ObjectId } from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { ApiError } from "../utils/ApiError.js";
@@ -23,6 +23,7 @@ export interface EmailInfo {
 
 // intereface for IUser document
 export interface IUser extends Document {
+    _id: ObjectId;
     username: string;
     name: FullName;
     email: EmailInfo;

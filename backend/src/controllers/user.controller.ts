@@ -1,15 +1,13 @@
-import { loadConfig } from "../config/loadConfig.js";
-import { AppConfig } from "../config/type.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import User, { IUser } from "../models/users.model.js";
-import jwt from "jsonwebtoken";
-import mongoose, { ObjectId } from "mongoose";
+import { ObjectId } from "mongoose";
 import { Request, Response } from "express";
+import { OPTIONS } from "../constants.js";
 
 const generateAccessAndRefreshTokens = async (
-    userId: ObjectId | string,
+    userId: ObjectId,
 ): Promise<{ accessToken: string; refreshToken: string }> => {
     try {
         const user: IUser | null = await User.findById(userId);
@@ -75,8 +73,8 @@ const registerUser = asyncHandler(
 
         const existedUser: IUser | null = await User.findOne({
             $or: [
-                { username: username.toLowerCase() },
-                { "email.emailAddress": emailAddress.toLowerCase() },
+                { username: username.toLowerCase().trim() },
+                { "email.emailAddress": emailAddress.toLowerCase().trim() },
             ],
         });
 
@@ -115,4 +113,75 @@ const registerUser = asyncHandler(
     },
 );
 
-export { registerUser };
+const loginUser = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+        const {
+            username,
+            emailAddress,
+            password,
+        }: {
+            username: string;
+            emailAddress: string;
+            password: string;
+        } = req.body;
+
+        // Validating the data
+        if (
+            (!username && !emailAddress) ||
+            (username.trim() === "" && emailAddress.trim() === "")
+        ) {
+            throw new ApiError(400, "Username or Email Address are required");
+        }
+        if (!password || password.trim() === "") {
+            throw new ApiError(400, "Password is required");
+        }
+
+        const user: IUser | null = await User.findOne({
+            $or: [
+                { username: username?.toLowerCase().trim() },
+                { email: { emailAddress: emailAddress?.toLowerCase().trim() } },
+            ],
+        });
+
+        if (!user) {
+            throw new ApiError(401, "Invalid username or email address");
+        }
+
+        const isPasswordCorrect: boolean =
+            await user.isPasswordCorrect(password);
+        if (!isPasswordCorrect) {
+            throw new ApiError(401, "Invalid password");
+        }
+
+        // Generating access and refresh tokens
+        const { accessToken, refreshToken } =
+            await generateAccessAndRefreshTokens(user._id);
+
+        const loginUser: IUser | null = await User.findById(user._id).select(
+            "-password -refreshToken -__v",
+        );
+
+        if (!loginUser) {
+            throw new ApiError(500, "Couldn't login user");
+        }
+
+        // set cookies options
+
+        res.status(200)
+            .cookie("accessToken", accessToken, OPTIONS)
+            .cookie("refreshToken", refreshToken, OPTIONS)
+            .json({
+                data: new ApiResponse(
+                    200,
+                    {
+                        user: loginUser,
+                        accessToken,
+                        refreshToken,
+                    },
+                    "User logged in successfully",
+                ),
+            });
+    },
+);
+
+export { registerUser, loginUser };
