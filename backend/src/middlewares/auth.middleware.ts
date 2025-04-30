@@ -17,9 +17,7 @@ const envConfig: AppConfig = loadConfig();
 export const verfiyJWT = asyncHandler(
     async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
         try {
-            const token: string | undefined =
-                req.cookies?.accessToken ||
-                req.header("Authorization")?.replace("Bearer ", "");
+            const token: string | undefined = req.cookies?.accessToken;
 
             if (!token) {
                 throw new ApiError(401, "Token not found");
