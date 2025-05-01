@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Model, ObjectId } from "mongoose";
-
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 export interface IFolder extends Document {
     _id: ObjectId;
     folderName: string;
@@ -40,6 +40,8 @@ const folderSchema = new Schema<IFolder>(
     },
     { timestamps: true },
 );
+
+folderSchema.plugin(mongooseAggregatePaginate);
 
 const FolderModel: Model<IFolder> = mongoose.model<IFolder>(
     "Folder",
