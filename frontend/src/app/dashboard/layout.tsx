@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider"
-
 import { AppSidebar } from "@/components/app-sidebar"
-
 import {
   SidebarInset,
   SidebarProvider,
@@ -13,40 +11,29 @@ export const metadata: Metadata = {
   description: "AI note taking app.",
 };
 
-
-
-export default function RootLayout({ children }: Readonly<{
+export default function DashboardLayout({ children }: Readonly<{
     children: React.ReactNode;
   }>) {
   return (
-    <>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-     <SidebarProvider
-         style={
-            {
-              "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
-           } as React.CSSProperties
-      }
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <SidebarProvider
+        style={
+          {
+            "--sidebar-width": "calc(var(--spacing) * 72)",
+            "--header-height": "calc(var(--spacing) * 12)",
+          } as React.CSSProperties
+        }
       >
-      <AppSidebar variant="inset" />
-      <SidebarInset>
-      {children}
-
-      </SidebarInset>
-     </SidebarProvider>
-
-          </ThemeProvider>
-        </body>
-      </html>
-    </>
+        <AppSidebar variant="inset" />
+        <SidebarInset>
+          {children}
+        </SidebarInset>
+      </SidebarProvider>
+    </ThemeProvider>
   )
 }

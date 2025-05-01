@@ -1,5 +1,6 @@
 [
   {
+    "id": 1,
     "title": "Understanding Async/Await in JavaScript",
     "date": "2025-04-25",
     "hexColor": "#34D399",
@@ -8,6 +9,8 @@
     "tags": ["JavaScript", "Asynchronous", "Web Development"]
   },
   {
+    "id": 2,
+
     "title": "Top 10 UI/UX Design Principles",
     "date": "2025-03-18",
     "hexColor": "#FBBF24",
@@ -16,6 +19,8 @@
     "tags": ["UX", "UI", "Best Practices"]
   },
   {
+    "id": 3,
+
     "title": "Beginner’s Guide to Investing",
     "date": "2025-01-10",
     "hexColor": "#60A5FA",
@@ -24,6 +29,8 @@
     "tags": ["Investing", "Beginners", "Personal Finance"]
   },
   {
+    "id": 4,
+
     "title": "How to Cook Perfect Pasta Every Time",
     "date": "2025-02-20",
     "hexColor": "#F87171",
@@ -32,6 +39,8 @@
     "tags": ["Pasta", "Cooking Tips", "Food"]
   },
   {
+    "id": 5,
+
     "title": "5 Morning Habits for Better Productivity",
     "date": "2025-04-01",
     "hexColor": "#A78BFA",
@@ -40,6 +49,8 @@
     "tags": ["Productivity", "Habits", "Routine"]
   },
 {
+  "id": 6,
+
       "title": "The Rise of Electric Vehicles in 2025",
       "date": "2025-03-05",
       "hexColor": "#10B981",
@@ -48,6 +59,8 @@
       "tags": ["EV", "Green Energy", "Future Tech"]
     },
     {
+      "id": 7,
+
       "title": "Meditation Techniques for Stress Relief",
       "date": "2025-01-30",
       "hexColor": "#F59E0B",
@@ -56,6 +69,8 @@
       "tags": ["Meditation", "Stress Relief", "Mindfulness"]
     },
     {
+      "id": 8,
+
       "title": "A Beginner's Guide to Git and GitHub",
       "date": "2025-02-12",
       "hexColor": "#3B82F6",
@@ -72,6 +87,8 @@
       "tags": ["Travel Tips", "Hidden Gems", "Destinations"]
     },
     {
+      "id": 9,
+
       "title": "How to Budget Your Monthly Expenses",
       "date": "2025-03-22",
       "hexColor": "#8B5CF6",
