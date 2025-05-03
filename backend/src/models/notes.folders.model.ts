@@ -11,7 +11,7 @@ export interface IFolder extends Document {
     description: string;
     hex_color: string;
     userId: ObjectId;
-    parentFolderId?: ObjectId;
+    parentFolderId?: ObjectId | null;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -41,6 +41,7 @@ const folderSchema = new Schema<IFolder>(
         parentFolderId: {
             type: Schema.Types.ObjectId,
             ref: "Folder",
+            default: null,
             // TODO(subarna): add default value to the root folder.
             // TODO(subarna): add validation to check if the parent folder exists
         },

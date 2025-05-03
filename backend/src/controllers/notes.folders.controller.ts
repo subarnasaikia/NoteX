@@ -22,7 +22,7 @@ const createFolder = asyncHandler(
             folderName: string;
             description: string;
             hex_color: string;
-            parentFolderId?: string;
+            parentFolderId?: string | null;
         } = req.body;
 
         if (!folderName) {
@@ -160,10 +160,77 @@ const fetchFoldersWithPagination = asyncHandler(
     },
 );
 
+// facthing all contents, images, folders that are inside a folder using folderId
+const fetchContentsImagesFoldersInFolder = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+        if (!req.user) {
+            throw new ApiError(401, "User not authenticated!");
+        }
+        // TODO(subarna): checking if user's email is verified
+
+        const { folderId } = req.params;
+
+        if (!mongoose.isValidObjectId(folderId)) {
+            throw new ApiError(400, "Invalid folder ID!");
+        }
+
+        const contents = await FolderModel.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(folderId),
+                    userId: req.user._id,
+                },
+            },
+            {
+                $lookup: {
+                    from: "contents",
+                    let: { folderId: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $eq: ["$parentFolderId", "$$folderId"],
+                                },
+                            },
+                        },
+                        {
+                            $project: {
+                                body: 0,
+                            },
+                        },
+                    ],
+                    as: "notes",
+                },
+            },
+            {
+                $lookup: {
+                    from: "images",
+                    localField: "_id",
+                    foreignField: "parentFolderId",
+                    as: "images",
+                },
+            },
+            {
+                $lookup: {
+                    from: "folders",
+                    localField: "_id",
+                    foreignField: "parentFolderId",
+                    as: "subFolders",
+                },
+            },
+        ]);
+
+        res.status(200).json(
+            new ApiResponse(200, contents, "Contents fetched successfully!"),
+        );
+    },
+);
+
 export {
     createFolder,
     fetchFolders,
     updateFolder,
     deleteFolder,
     fetchFoldersWithPagination,
+    fetchContentsImagesFoldersInFolder,
 };

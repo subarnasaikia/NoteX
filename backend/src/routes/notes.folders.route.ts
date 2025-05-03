@@ -6,6 +6,7 @@ import {
     deleteFolder,
     updateFolder,
     fetchFoldersWithPagination,
+    fetchContentsImagesFoldersInFolder,
 } from "../controllers/notes.folders.controller.js";
 
 const router: Router = Router();
@@ -16,5 +17,7 @@ router.route("/fetch-folders").get(fetchFolders);
 router.route("/update-folder/:folderId").patch(updateFolder);
 router.route("/delete-folder/:folderId").delete(deleteFolder);
 router.route("/fetch-folders/:page/:limit").get(fetchFoldersWithPagination);
-
+router
+    .route("/fetch-folder-contents/:folderId")
+    .get(fetchContentsImagesFoldersInFolder);
 export default router;

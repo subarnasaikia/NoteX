@@ -81,4 +81,20 @@ const deletePin = asyncHandler(
     },
 );
 
-export { createPin, deletePin };
+// get all pins
+const getAllPins = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+        if (!req.user) {
+            throw new ApiError(401, "User not authenticated!");
+        }
+        // TODO(subarna): checking if user's email is verified
+
+        const pins: IPin[] = await PinModel.find({ userId: req.user._id });
+
+        res.status(200).json(
+            new ApiResponse(200, pins, "Pins fetched successfully!"),
+        );
+    },
+);
+
+export { createPin, deletePin, getAllPins };
