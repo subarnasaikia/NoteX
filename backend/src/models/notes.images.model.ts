@@ -1,5 +1,10 @@
-import mongoose, { Schema, Document, Model, ObjectId } from "mongoose";
-import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
+import mongoose, {
+    Schema,
+    Document,
+    ObjectId,
+    AggregatePaginateModel,
+} from "mongoose";
+import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 export interface IImage extends Document {
     _id: ObjectId;
@@ -35,7 +40,10 @@ const imageSchema = new Schema<IImage>(
     { timestamps: true },
 );
 
-imageSchema.plugin(mongooseAggregatePaginate);
+imageSchema.plugin(aggregatePaginate);
 
-const ImageModel: Model<IImage> = mongoose.model<IImage>("Image", imageSchema);
+const ImageModel = mongoose.model<IImage, AggregatePaginateModel<IImage>>(
+    "Image",
+    imageSchema,
+);
 export default ImageModel;

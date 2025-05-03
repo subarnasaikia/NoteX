@@ -1,5 +1,10 @@
-import mongoose, { Schema, Document, Model, ObjectId } from "mongoose";
-import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
+import mongoose, {
+    Schema,
+    Document,
+    ObjectId,
+    AggregatePaginateModel,
+} from "mongoose";
+import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 // interface for subdocument
 export interface MarkdownContent {
@@ -148,10 +153,10 @@ const contentsSchema = new Schema<IContents>(
     { timestamps: true },
 );
 
-contentsSchema.plugin(mongooseAggregatePaginate);
+contentsSchema.plugin(aggregatePaginate);
 
-const ContentModel: Model<IContents> = mongoose.model<IContents>(
-    "Content",
-    contentsSchema,
-);
+const ContentModel = mongoose.model<
+    IContents,
+    AggregatePaginateModel<IContents>
+>("Content", contentsSchema);
 export default ContentModel;

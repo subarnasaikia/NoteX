@@ -1,5 +1,10 @@
-import mongoose, { Schema, Document, Model, ObjectId } from "mongoose";
-import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
+import mongoose, {
+    Schema,
+    Document,
+    ObjectId,
+    AggregatePaginateModel,
+} from "mongoose";
+import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 export interface IPin extends Document {
     _id: ObjectId;
@@ -31,6 +36,9 @@ const pinSchema = new Schema<IPin>(
     { timestamps: true },
 );
 
-pinSchema.plugin(mongooseAggregatePaginate);
-const PinModel: Model<IPin> = mongoose.model<IPin>("Pin", pinSchema);
+pinSchema.plugin(aggregatePaginate);
+const PinModel = mongoose.model<IPin, AggregatePaginateModel<IPin>>(
+    "Pin",
+    pinSchema,
+);
 export default PinModel;

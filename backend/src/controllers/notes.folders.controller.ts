@@ -128,42 +128,42 @@ const deleteFolder = asyncHandler(
     },
 );
 
-// fetching using pagination
-// const fetchFoldersWithPagination = asyncHandler(
-//     async (req: Request, res: Response): Promise<void> => {
-//         if (!req.user) {
-//             throw new ApiError(401, "User not authenticated!");
-//         }
-//         // TODO(subarna): checking if user's email is verified
+// fetching using pagination for root directory.
+const fetchFoldersWithPagination = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+        if (!req.user) {
+            throw new ApiError(401, "User not authenticated!");
+        }
+        // TODO(subarna): checking if user's email is verified
 
-//         const { page = "1", limit = "10" } = req.query as {
-//             page?: string;
-//             limit?: string;
-//         };
+        const { page = "1", limit = "10" } = req.query as {
+            page?: string;
+            limit?: string;
+        };
 
-//         const options = {
-//             page: Number(page),
-//             limit: Number(limit),
-//         };
+        const options = {
+            page: Number(page),
+            limit: Number(limit),
+        };
 
-//         const folders = await FolderModel.mongooseAggregatePaginate(
-//             FolderModel.aggregate([
-//                 { $match: { userId: req.user._id } },
-//                 { $sort: { createdAt: -1 } },
-//             ]),
-//             options,
-//         );
+        const folders = await FolderModel.aggregatePaginate(
+            FolderModel.aggregate([
+                { $match: { userId: req.user._id } },
+                { $sort: { createdAt: -1 } },
+            ]),
+            options,
+        );
 
-//         res.status(200).json(
-//             new ApiResponse(200, folders, "Folders fetched successfully!"),
-//         );
-//     },
-// );
+        res.status(200).json(
+            new ApiResponse(200, folders, "Folders fetched successfully!"),
+        );
+    },
+);
 
 export {
     createFolder,
     fetchFolders,
     updateFolder,
     deleteFolder,
-    // fetchFoldersWithPagination,
+    fetchFoldersWithPagination,
 };
