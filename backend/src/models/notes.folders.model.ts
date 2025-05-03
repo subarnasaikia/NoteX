@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Model, ObjectId } from "mongoose";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
+
 export interface IFolder extends Document {
     _id: ObjectId;
     folderName: string;
@@ -36,6 +37,8 @@ const folderSchema = new Schema<IFolder>(
         parentFolderId: {
             type: Schema.Types.ObjectId,
             ref: "Folder",
+            // TODO(subarna): add default value to the root folder.
+            // TODO(subarna): add validation to check if the parent folder exists
         },
     },
     { timestamps: true },
