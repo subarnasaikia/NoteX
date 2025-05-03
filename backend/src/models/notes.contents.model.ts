@@ -56,11 +56,11 @@ const baseBodySchema = new Schema(
 
 const markdownBodySchema = new Schema(
     {
-        type: {
-            type: String,
-            enum: ["markdown"],
-            default: "markdown",
-        },
+        // type: {
+        //     type: String,
+        //     enum: ["markdown"],
+        //     default: "markdown",
+        // },
         bodyContent: {
             type: String,
             required: true,
@@ -71,11 +71,11 @@ const markdownBodySchema = new Schema(
 
 const latexBodySchema = new Schema(
     {
-        type: {
-            type: String,
-            enum: ["latex"],
-            default: "latex",
-        },
+        // type: {
+        //     type: String,
+        //     enum: ["latex"],
+        //     default: "latex",
+        // },
         bodyContent: {
             type: String,
             required: true,
@@ -86,11 +86,11 @@ const latexBodySchema = new Schema(
 
 const excalidrawBodySchema = new Schema(
     {
-        type: {
-            type: String,
-            enum: ["excalidraw"],
-            default: "excalidraw",
-        },
+        // type: {
+        //     type: String,
+        //     enum: ["excalidraw"],
+        //     default: "excalidraw",
+        // },
         bodyContent: {
             type: Schema.Types.Mixed,
             required: true,
@@ -101,11 +101,11 @@ const excalidrawBodySchema = new Schema(
 
 const docsBodySchema = new Schema(
     {
-        type: {
-            type: String,
-            enum: ["docs"],
-            default: "docs",
-        },
+        // type: {
+        //     type: String,
+        //     enum: ["docs"],
+        //     default: "docs",
+        // },
         bodyContent: {
             type: [Schema.Types.Mixed],
             required: true,
