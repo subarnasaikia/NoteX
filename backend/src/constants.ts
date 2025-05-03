@@ -3,3 +3,4 @@ export const OPTIONS = {
     httpOnly: true,
     secure: true,
 };
+export const MAX_PIN_LIMIT: number = 3;
