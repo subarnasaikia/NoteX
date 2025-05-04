@@ -38,7 +38,7 @@ export interface IContents extends Document {
     title: string;
     hex_color: string;
     body: ContentBody;
-    parentFolderId: ObjectId;
+    parentFolderId: ObjectId | null;
     userId: ObjectId;
     tags: string[];
     createdAt: Date;
@@ -138,7 +138,7 @@ const contentsSchema = new Schema<IContents>(
         parentFolderId: {
             type: Schema.Types.ObjectId,
             ref: "Folder",
-            required: [true, "Parent folder ID is required!"],
+            default: null,
         },
         userId: {
             type: Schema.Types.ObjectId,

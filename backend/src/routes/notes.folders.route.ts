@@ -7,6 +7,7 @@ import {
     updateFolder,
     fetchFoldersWithPagination,
     fetchContentsImagesFoldersInFolder,
+    fetchContentsImagesFoldersForROOT,
 } from "../controllers/notes.folders.controller.js";
 
 const router: Router = Router();
@@ -20,4 +21,7 @@ router.route("/fetch-folders/:page/:limit").get(fetchFoldersWithPagination);
 router
     .route("/fetch-folder-contents/:folderId")
     .get(fetchContentsImagesFoldersInFolder);
+router
+    .route("/fetch-root-folder-contents")
+    .get(fetchContentsImagesFoldersForROOT);
 export default router;

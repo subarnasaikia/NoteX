@@ -2,6 +2,8 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import FolderModel, { IFolder } from "../models/notes.folders.model.js";
+import ContentModel from "../models/notes.contents.model.js";
+import ImageModel from "../models/notes.images.model.js";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 
@@ -78,6 +80,10 @@ const updateFolder = asyncHandler(
 
         if (!folderId) {
             throw new ApiError(400, "Folder ID is required!");
+        }
+
+        if (!folderName && folderName === "") {
+            throw new ApiError(400, "Folder name is required!");
         }
 
         const updatedFolder: IFolder | null =
@@ -226,6 +232,40 @@ const fetchContentsImagesFoldersInFolder = asyncHandler(
     },
 );
 
+const fetchContentsImagesFoldersForROOT = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+        if (!req.user) {
+            throw new ApiError(401, "User not authenticated!");
+        }
+        // TODO(subarna): checking if user's email is verified
+
+        const [contents, images, folders] = await Promise.all([
+            ContentModel.find({
+                userId: req.user._id,
+                parentFolderId: null,
+            }).select("-body"), // exclude body if large
+
+            ImageModel.find({
+                userId: req.user._id,
+                parentFolderId: null,
+            }),
+
+            FolderModel.find({
+                userId: req.user._id,
+                parentFolderId: null,
+            }),
+        ]);
+
+        res.status(200).json(
+            new ApiResponse(
+                200,
+                { folders, contents, images },
+                "Contents fetched successfully!",
+            ),
+        );
+    },
+);
+
 export {
     createFolder,
     fetchFolders,
@@ -233,4 +273,5 @@ export {
     deleteFolder,
     fetchFoldersWithPagination,
     fetchContentsImagesFoldersInFolder,
+    fetchContentsImagesFoldersForROOT,
 };

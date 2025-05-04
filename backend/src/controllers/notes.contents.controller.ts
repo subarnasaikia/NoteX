@@ -22,7 +22,7 @@ const createContent = asyncHandler(
             title: string;
             hex_color: string;
             body: IContents["body"];
-            parentFolderId: string;
+            parentFolderId: string | null;
             tags?: string[];
         } = req.body;
 
