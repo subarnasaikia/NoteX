@@ -151,17 +151,91 @@ const fetchFoldersWithPagination = asyncHandler(
             page: Number(page),
             limit: Number(limit),
         };
-
-        const folders = await FolderModel.aggregatePaginate(
-            FolderModel.aggregate([
-                { $match: { userId: req.user._id } },
-                { $sort: { createdAt: -1 } },
-            ]),
-            options,
-        );
-
+        // fecthing all folders, contents, images, folders that are inside a folder using folderId with pagination
+        const folders = await FolderModel.aggregate([
+            {
+                $match: {
+                    userId: req.user._id,
+                    parentFolderId: null,
+                },
+            },
+            {
+                $lookup: {
+                    from: "contents",
+                    let: { folderId: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $eq: ["$parentFolderId", "$$folderId"],
+                                },
+                            },
+                        },
+                        {
+                            $project: {
+                                body: 0,
+                            },
+                        },
+                    ],
+                    as: "notes",
+                },
+            },
+            {
+                $lookup: {
+                    from: "images",
+                    localField: "_id",
+                    foreignField: "parentFolderId",
+                    as: "images",
+                },
+            },
+            {
+                $lookup: {
+                    from: "folders",
+                    localField: "_id",
+                    foreignField: "parentFolderId",
+                    as: "subFolders",
+                },
+            },
+            { $sort: { createdAt: -1 } },
+            { $skip: (Number(page) - 1) * Number(limit) },
+            { $limit: Number(limit) },
+            {
+                $project: {
+                    folderName: 1,
+                    description: 1,
+                    hex_color: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                    userId: 1,
+                    notes: 1,
+                    images: 1,
+                    subFolders: 1,
+                },
+            },
+        ]);
+        const totalFolders = await FolderModel.countDocuments({
+            userId: req.user._id,
+            parentFolderId: null,
+        });
+        const totalPages = Math.ceil(totalFolders / Number(limit));
+        const hasNextPage = Number(page) < totalPages;
+        const hasPreviousPage = Number(page) > 1;
+        const nextPage = hasNextPage ? Number(page) + 1 : null;
+        const previousPage = hasPreviousPage ? Number(page) - 1 : null;
+        const pagination = {
+            totalFolders,
+            totalPages,
+            hasNextPage,
+            hasPreviousPage,
+            nextPage,
+            previousPage,
+        };
         res.status(200).json(
-            new ApiResponse(200, folders, "Folders fetched successfully!"),
+            new ApiResponse(
+                200,
+                { folders, pagination },
+                "Folders fetched successfully!",
+            ),
         );
     },
 );
@@ -174,7 +248,7 @@ const fetchContentsImagesFoldersInFolder = asyncHandler(
         }
         // TODO(subarna): checking if user's email is verified
 
-        const { folderId } = req.params;
+        const { folderId, page = 1, limit = 5 } = req.params;
 
         if (!mongoose.isValidObjectId(folderId)) {
             throw new ApiError(400, "Invalid folder ID!");
@@ -224,10 +298,46 @@ const fetchContentsImagesFoldersInFolder = asyncHandler(
                     as: "subFolders",
                 },
             },
+            { $sort: { createdAt: -1 } },
+            { $skip: (Number(page) - 1) * Number(limit) },
+            { $limit: Number(limit) },
+            {
+                $project: {
+                    folderName: 1,
+                    description: 1,
+                    hex_color: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                    userId: 1,
+                    notes: 1,
+                    images: 1,
+                    subFolders: 1,
+                },
+            },
         ]);
-
+        const totalFolders = await FolderModel.countDocuments({
+            userId: req.user._id,
+            parentFolderId: folderId,
+        });
+        const totalPages = Math.ceil(totalFolders / Number(limit));
+        const hasNextPage = Number(page) < totalPages;
+        const hasPreviousPage = Number(page) > 1;
+        const nextPage = hasNextPage ? Number(page) + 1 : null;
+        const previousPage = hasPreviousPage ? Number(page) - 1 : null;
+        const pagination = {
+            totalFolders,
+            totalPages,
+            hasNextPage,
+            hasPreviousPage,
+            nextPage,
+            previousPage,
+        };
         res.status(200).json(
-            new ApiResponse(200, contents, "Contents fetched successfully!"),
+            new ApiResponse(
+                200,
+                { contents, pagination },
+                "Contents fetched successfully!",
+            ),
         );
     },
 );

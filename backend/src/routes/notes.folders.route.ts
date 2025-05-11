@@ -17,9 +17,11 @@ router.route("/create-folder").post(createFolder);
 router.route("/fetch-folders").get(fetchFolders);
 router.route("/update-folder/:folderId").patch(updateFolder);
 router.route("/delete-folder/:folderId").delete(deleteFolder);
-router.route("/fetch-folders/:page/:limit").get(fetchFoldersWithPagination);
 router
-    .route("/fetch-folder-contents/:folderId")
+    .route("/fetch-folders/root/page/:page/limit/:limit")
+    .get(fetchFoldersWithPagination);
+router
+    .route("/fetch-folder-contents/folderId/:folderId/page/:page/limit/:limit")
     .get(fetchContentsImagesFoldersInFolder);
 router
     .route("/fetch-root-folder-contents")

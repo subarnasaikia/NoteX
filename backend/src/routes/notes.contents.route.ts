@@ -5,6 +5,7 @@ import {
     fetchContentUsingId,
     updateContentUsingId,
     deleteContentUsingId,
+    searchContent,
 } from "../controllers/notes.contents.controller.js";
 
 const router: Router = Router();
@@ -13,6 +14,6 @@ router.route("/create-content").post(createContent);
 router.route("/fetch-content/:contentId").get(fetchContentUsingId);
 router.route("/update-content/:contentId").patch(updateContentUsingId);
 router.route("/delete-content/:contentId").delete(deleteContentUsingId);
-// TODO(subarna): add search content using search query
+router.route("/search-content").post(searchContent);
 
 export default router;

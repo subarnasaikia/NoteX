@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Request, Response } from "express";
 import ContentModel, { IContents } from "../models/notes.contents.model.js";
+import { semanticSearch } from "../agent/search.js";
 
 // create new content
 const createContent = asyncHandler(
@@ -169,9 +170,41 @@ const deleteContentUsingId = asyncHandler(
     },
 );
 
+// search using vector search from agent/search.ts
+const searchContent = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+        if (!req.user) {
+            throw new ApiError(401, "User not authenticated!");
+        }
+        // TODO(subarna): checking if user's email is verified
+        const { query } = req.body;
+        if (!query) {
+            throw new ApiError(400, "Query is required!");
+        }
+        const results = await semanticSearch(query, 5);
+        if (!results) {
+            throw new ApiError(404, "No results found!");
+        }
+        const contents = results.map((result) => {
+            return {
+                _id: result.metadata._id,
+                title: result.metadata.title,
+                body: result.pageContent,
+                hex_color: result.metadata.hex_color,
+                parentFolderId: result.metadata.parentFolderId,
+                tags: result.metadata.tags,
+            };
+        });
+        res.status(200).json(
+            new ApiResponse(200, contents, "Content fetched successfully!"),
+        );
+    },
+);
+
 export {
     createContent,
     fetchContentUsingId,
     updateContentUsingId,
     deleteContentUsingId,
+    searchContent,
 };
