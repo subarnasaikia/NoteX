@@ -36,6 +36,8 @@ import notesFolderRouter from "./routes/notes.folders.route.js";
 import notesContentRouter from "./routes/notes.contents.route.js";
 import notespinRouter from "./routes/notes.pins.route.js";
 import notesImageRouter from "./routes/notes.images.route.js";
+import quizRouter from "./routes/quiz.route.js";
+import revisionRouter from "./routes/revision.route.js";
 
 // routes declariation
 app.use("/api/v1/user", userRouter);
@@ -43,6 +45,8 @@ app.use("/api/v1/notes/folders", notesFolderRouter);
 app.use("/api/v1/notes/contents", notesContentRouter);
 app.use("/api/v1/notes/pins", notespinRouter);
 app.use("/api/v1/notes/images", notesImageRouter);
+app.use("/api/v1/quiz", quizRouter);
+app.use("/api/v1/revision", revisionRouter);
 
 // Global errorHandler always be at the end of the file.
 app.use(errorHandler);

@@ -13,7 +13,7 @@ export interface IQuiz extends Document {
     hex_color: string;
     body: QuizBody[];
     tags: string[];
-    UserId: ObjectId;
+    userId: ObjectId;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -58,7 +58,7 @@ const quizSchema = new Schema<IQuiz>(
             type: [String],
             default: [],
         },
-        UserId: {
+        userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true,
