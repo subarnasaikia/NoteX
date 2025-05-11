@@ -27,6 +27,10 @@
         "lint": "eslint 'src/**/*.ts'"
     },
     "dependencies": {
+        "@langchain/core": "^0.3.55",
+        "@langchain/mongodb": "^0.1.0",
+        "@langchain/openai": "^0.5.10",
+        "@langchain/textsplitters": "^0.1.0",
         "bcrypt": "^5.1.1",
         "cloudinary": "^2.6.0",
         "cookie-parser": "^1.4.7",
@@ -34,6 +38,8 @@
         "dotenv": "^16.5.0",
         "express": "^5.1.0",
         "jsonwebtoken": "^9.0.2",
+        "langchain": "^0.3.24",
+        "mongodb": "^6.16.0",
         "mongoose": "^8.13.2",
         "mongoose-aggregate-paginate-v2": "^1.1.4",
         "ms": "^2.1.3",

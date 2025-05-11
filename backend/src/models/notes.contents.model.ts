@@ -3,8 +3,10 @@ import mongoose, {
     Document,
     ObjectId,
     AggregatePaginateModel,
+    CallbackError,
 } from "mongoose";
 import aggregatePaginate from "mongoose-aggregate-paginate-v2";
+import { embedContent, embeddingToBuffer } from "../agent/embeddings.js";
 
 // interface for subdocument
 export interface MarkdownContent {
@@ -38,6 +40,7 @@ export interface IContents extends Document {
     title: string;
     hex_color: string;
     body: ContentBody;
+    embedding?: Buffer; // optional field for embedding
     parentFolderId: ObjectId | null;
     userId: ObjectId;
     tags: string[];
@@ -135,6 +138,11 @@ const contentsSchema = new Schema<IContents>(
             type: baseBodySchema,
             required: true,
         },
+        embedding: {
+            type: Buffer,
+            required: false,
+            default: null,
+        },
         parentFolderId: {
             type: Schema.Types.ObjectId,
             ref: "Folder",
@@ -152,6 +160,25 @@ const contentsSchema = new Schema<IContents>(
     },
     { timestamps: true },
 );
+
+contentsSchema.index({ title: "text" });
+
+contentsSchema.pre<IContents>("save", async function (next) {
+    try {
+        if (this.isModified("body")) {
+            const content = this.body.bodyContent;
+            const contentType = this.body.type;
+
+            if (content && contentType) {
+                const vector = await embedContent(content, contentType);
+                this.embedding = embeddingToBuffer(vector);
+            }
+        }
+        next();
+    } catch (error: any) {
+        next(error);
+    }
+});
 
 contentsSchema.plugin(aggregatePaginate);
 

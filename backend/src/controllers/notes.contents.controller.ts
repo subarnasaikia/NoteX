@@ -42,8 +42,16 @@ const createContent = asyncHandler(
             tags,
         });
 
+        const contentBody: IContents | null = await ContentModel.findById(
+            newContent._id,
+        ).select("-__v -embedding");
+
+        if (!contentBody) {
+            throw new ApiError(404, "Can't create content!");
+        }
+
         res.status(201).json(
-            new ApiResponse(200, newContent, "Content created successfully!"),
+            new ApiResponse(200, contentBody, "Content created successfully!"),
         );
     },
 );
@@ -67,7 +75,7 @@ const fetchContentUsingId = asyncHandler(
         const content: IContents | null = await ContentModel.findOne({
             _id: contentId,
             userId: req.user?._id,
-        });
+        }).select("-__v -embedding");
 
         if (!content) {
             throw new ApiError(404, "Content not found!");
@@ -120,7 +128,7 @@ const updateContentUsingId = asyncHandler(
                 tags,
             },
             { new: true },
-        );
+        ).select("-__v -embedding");
 
         if (!content) {
             throw new ApiError(404, "Content not found!");
@@ -149,14 +157,14 @@ const deleteContentUsingId = asyncHandler(
         const content: IContents | null = await ContentModel.findOneAndDelete({
             _id: contentId,
             userId: req.user?._id,
-        });
+        }).select("-__v -embedding");
 
         if (!content) {
             throw new ApiError(404, "Content not found!");
         }
 
         res.status(200).json(
-            new ApiResponse(200, content, "Content deleted successfully!"),
+            new ApiResponse(200, {}, "Content deleted successfully!"),
         );
     },
 );
