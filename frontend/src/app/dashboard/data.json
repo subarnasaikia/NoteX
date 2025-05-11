@@ -4,7 +4,7 @@
     "title": "Understanding Async/Await in JavaScript",
     "date": "2025-04-25",
     "hexColor": "#34D399",
-    "body": "Async/await simplifies asynchronous programming, making code easier to read and maintain.",
+    "body": "  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     "category": "Programming",
     "tags": ["JavaScript", "Asynchronous", "Web Development"]
   },
@@ -79,6 +79,7 @@
       "tags": ["Git", "GitHub", "Version Control"]
     },
     {
+      "id": 10,
       "title": "10 Underrated Travel Destinations for 2025",
       "date": "2025-04-15",
       "hexColor": "#EC4899",

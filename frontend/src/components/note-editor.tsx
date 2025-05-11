@@ -62,9 +62,8 @@ export function NoteEditor({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Note title"
-          className={`w-full text-4xl font-bold border-none bg-transparent shadow-none focus-visible:ring-0 outline-none custom-input ${textColor}`}
+          className={`w-full text-sm md:text-base lg:text-lg font-bold border-none bg-transparent shadow-none focus-visible:ring-0 outline-none custom-input ${textColor}`}
           style={{ 
-            fontSize: '1rem',
             "--placeholder-color": isDark ? "#ffffffb3" : "#00000080" 
           } as React.CSSProperties}
         />

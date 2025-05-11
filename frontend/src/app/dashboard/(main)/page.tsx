@@ -1,20 +1,19 @@
-
 "use client";
 
-import { SiteHeader } from "@/components/site-header"
-import {   
+import { SiteHeader } from "@/components/site-header";
+import {
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
- } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { useRouter } from "next/navigation"
-import { PlusCircle, Edit } from "lucide-react"
-
-import data from "../data.json"
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { PlusCircle, Edit } from "lucide-react";
+import { isColorDark } from "@/lib/utils";
+import data from "../data.json";
 
 export default function Page() {
   const router = useRouter();
@@ -28,37 +27,56 @@ export default function Page() {
   };
 
   return (
-    <main>
-     <SiteHeader title="Notes" />
-    <div className="flex flex-1 flex-col">
-   
-      <div className="@container/main flex flex-1 flex-col gap-2">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4 md:gap-6 md:p-6">
-
-          {data.map((note, idx) => (
-      <Card className="w-full"   style={{ backgroundColor: note.hexColor }}
-      key = {note.title}  >
-
-       <CardHeader className="flex flex-row items-start justify-between pb-2">
-          <div>
-            <CardTitle>{note.title}</CardTitle>
-            <CardDescription>Created on {note.date}</CardDescription>
-          </div>
-          <Button variant="ghost" size="icon" onClick={() => handleEdit(String(note.id))}>
-            <Edit className="h-4 w-4" />
+    <main >
+      <SiteHeader title="Notes" />
+      <div className="flex flex-1 flex-col">
+        <div className="flex justify-end px-6 pt-4">
+          <Button onClick={handleCreate}>
+            <PlusCircle className="mr-2 h-4 w-4" />
+            New Note
           </Button>
-        </CardHeader>
-        <CardContent>
-          {note.body}
-      </CardContent>
-       </Card>
+        </div>
 
-          ))}
+        <div className="@container/main flex flex-1 flex-col gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4 md:gap-6 md:p-6">
+            {data.map((note) => {
+              const isDark = isColorDark(note.hexColor);
+              const textColor = isDark ? "text-white" : "text-black";
+              const mutedText = isDark ? "text-white/70" : "text-black/60";
 
+              return (
+                <Card
+                  key={note.id}
+                  className={`w-full rounded-2xl p-4 py-8 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.01] hover:-translate-y-1 ${textColor}`}
+                  style={{ backgroundColor: note.hexColor }}
+                >
+                  <CardHeader className="relative pb-2 ">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleEdit(String(note.id))}
+                      className={`absolute top-2 right-2 hover:bg-black/10 ${
+                        isDark ? "text-white hover:text-white" : "text-black hover:text-black"
+                      }`}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <CardTitle className="truncate text-lg font-semibold  max-w-[250px]">
+                      {note.title}
+                    </CardTitle>
+                    <CardDescription className={`text-xs ${mutedText}`}>
+                      Created on {note.date}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className={`line-clamp-4  text-sm ${mutedText}`}>
+                    {note.body}
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
     </main>
-   
-  )
+  );
 }
