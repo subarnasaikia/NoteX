@@ -3,6 +3,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* global.css or a module file */
+.custom-input::placeholder {
+  color: var(--placeholder-color);
+}
+
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

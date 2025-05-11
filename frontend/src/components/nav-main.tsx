@@ -27,6 +27,7 @@ export function NavMain({
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
+          <Link href="/editor">
           <SidebarMenuItem className="flex items-center gap-2">
             <SidebarMenuButton
               tooltip="Create a New Note"
@@ -36,6 +37,8 @@ export function NavMain({
               <span>Create Note</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
+                    </Link>
+
         </SidebarMenu>
         <SidebarMenu>
           {items.map((item) => (

@@ -1,22 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { isColorDark } from "@/lib/utils";
 
 interface NoteEditorProps {
   initialTitle?: string;
   initialContent?: string;
   initialColor?: string;
+  onColorChanged?: (color: string) => void;
   onSave?: (note: { title: string; content: string; color: string }) => void;
   onCancel?: () => void;
 }
+
+
 
 export function NoteEditor({
   initialTitle = "",
   initialContent = "",
   initialColor = "#ffffff",
+  onColorChanged,
   onSave,
   onCancel,
 }: NoteEditorProps) {
@@ -24,68 +29,94 @@ export function NoteEditor({
   const [content, setContent] = useState(initialContent);
   const [color, setColor] = useState(initialColor);
 
+  const isDark = isColorDark(color);
+  const textColor = isDark ? "text-white" : "text-black";
+  const placeholderColor = isDark ? "placeholder-white/70" : "placeholder-black/50";
+
+  const handleColorChange = (newColor: string) => {
+    setColor(newColor);
+    onColorChanged?.(newColor);
+  };
+
   const handleSave = () => {
-    if (onSave) {
-      onSave({
-        title,
-        content,
-        color,
-      });
-    }
+    onSave?.({ title, content, color });
   };
 
   const colorOptions = [
-    "#ffffff", // White
-    "#f8f9fa", // Light gray
-    "#ffe8e8", // Light red
-    "#fff8e8", // Light yellow
-    "#e8ffe8", // Light green
-    "#e8f8ff", // Light blue
-    "#f8e8ff", // Light purple
+    "#ffffff",
+    "#f8f9fa",
+    "#ffe8e8",
+    "#fff8e8",
+    "#e8ffe8",
+    "#e8f8ff",
+    "#f8e8ff",
   ];
 
   return (
-    <Card className="w-full max-w-3xl mx-auto" style={{ backgroundColor: color }}>
-      <CardHeader>
-        <Input
+    <div
+      className={`w-full h-screen flex flex-col ${textColor} bg-transparent`}
+    >
+      <div className="px-4 py-3">
+        <input
+          type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Note title"
-          className="text-xl font-bold border-none bg-transparent focus-visible:ring-0 px-0"
+          className={`w-full text-4xl font-bold border-none bg-transparent shadow-none focus-visible:ring-0 outline-none custom-input ${textColor}`}
+          style={{ 
+            fontSize: '1rem',
+            "--placeholder-color": isDark ? "#ffffffb3" : "#00000080" 
+          } as React.CSSProperties}
         />
-      </CardHeader>
-      <CardContent>
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Write your note here..."
-          className="w-full min-h-[200px] text-base bg-transparent border-none resize-none focus:outline-none"
-        />
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        <div className="flex gap-2">
-          {colorOptions.map((colorOption) => (
+      </div>
+
+      <Textarea
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        placeholder="Write your note here..."
+        className={`text-base flex-1 w-full border-none bg-transparent shadow-none focus-visible:ring-0 focus:outline-none p-0 px-4  m-0 rounded-none resize-none custom-input ${textColor}`}
+        style={{ "--placeholder-color": isDark ? "#ffffffb3" : "#00000080" } as React.CSSProperties}
+      />
+
+         <div className="fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-md border-t border-gray-200 p-3 flex justify-between items-center z-10">
+        <div className="flex items-center gap-2">
+          {colorOptions.map((c) => (
             <button
-              key={colorOption}
+              key={c}
               type="button"
               className={`w-6 h-6 rounded-full border ${
-                color === colorOption ? "ring-2 ring-offset-2 ring-black" : ""
+                color === c ? "ring-2 ring-offset-2 ring-black" : ""
               }`}
-              style={{ backgroundColor: colorOption }}
-              onClick={() => setColor(colorOption)}
-              aria-label={`Set note color to ${colorOption}`}
+              style={{ backgroundColor: c }}
+              onClick={() => handleColorChange(c)}
+              aria-label={`Select color ${c}`}
             />
           ))}
+
+          <div className="relative w-8 h-8">
+            <div
+              className="w-full h-full rounded-full border cursor-pointer"
+              style={{ backgroundColor: color }}
+              title="Pick custom color"
+            />
+            <input
+              type="color"
+              value={color}
+              onChange={(e) => handleColorChange(e.target.value)}
+              className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+            />
+          </div>
         </div>
+
         <div className="flex gap-2">
           {onCancel && (
-            <Button variant="outline" onClick={onCancel}>
+            <Button variant="outline" className="text-black" onClick={onCancel}>
               Cancel
             </Button>
           )}
           <Button onClick={handleSave}>Save</Button>
         </div>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 }
