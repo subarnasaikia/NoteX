@@ -3,10 +3,9 @@ import mongoose, {
     Document,
     ObjectId,
     AggregatePaginateModel,
-    CallbackError,
 } from "mongoose";
 import aggregatePaginate from "mongoose-aggregate-paginate-v2";
-import { embedContent, embeddingToBuffer } from "../agent/embeddings.js";
+import { embedContent } from "../agent/embeddings.js";
 
 // interface for subdocument
 export interface MarkdownContent {
@@ -40,7 +39,7 @@ export interface IContents extends Document {
     title: string;
     hex_color: string;
     body: ContentBody;
-    embedding?: Buffer; // optional field for embedding
+    embedding?: number[];
     parentFolderId: ObjectId | null;
     userId: ObjectId;
     tags: string[];
@@ -139,7 +138,7 @@ const contentsSchema = new Schema<IContents>(
             required: true,
         },
         embedding: {
-            type: Buffer,
+            type: [Number],
             required: false,
             default: null,
         },
@@ -171,7 +170,7 @@ contentsSchema.pre<IContents>("save", async function (next) {
 
             if (content && contentType) {
                 const vector = await embedContent(content, contentType);
-                this.embedding = embeddingToBuffer(vector);
+                this.embedding = vector;
             }
         }
         next();

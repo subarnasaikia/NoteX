@@ -52,30 +52,6 @@ export async function chunkContent(
 }
 
 /**
- * Convert a float array embedding to a Node.js Buffer (32-bit floats).
- * @param embedding - Array of numbers (float) from an embedding model.
- * @returns Buffer storing the 32-bit float data.
- */
-export function embeddingToBuffer(embedding: number[]): Buffer {
-    const floatArray = Float32Array.from(embedding);
-    return Buffer.from(floatArray.buffer);
-}
-
-/**
- * Convert a Buffer back into a float array (32-bit floats).
- * @param buffer - Buffer containing 32-bit float binary data.
- * @returns The embedding as number[].
- */
-export function bufferToEmbedding(buffer: Buffer): number[] {
-    const floatArray = new Float32Array(
-        buffer.buffer,
-        buffer.byteOffset,
-        buffer.byteLength / 4,
-    );
-    return Array.from(floatArray);
-}
-
-/**
  * Generate an embedding vector for given text by chunking and averaging.
  * @param content - The raw note content.
  * @param contentType - The content type ("markdown", "latex", etc.).
