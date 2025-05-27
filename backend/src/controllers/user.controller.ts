@@ -259,4 +259,19 @@ const refreshAccessToken = asyncHandler(
     },
 );
 
-export { registerUser, loginUser, logoutUser, refreshAccessToken };
+const getCurrentUser = asyncHandler(async (req, res) => {
+    if (!req.user) {
+        throw new ApiError(401, "User not authenticated!");
+    }
+    return res
+        .status(200)
+        .json(new ApiResponse(200, req.user, "User fetched successfully"));
+});
+
+export {
+    registerUser,
+    loginUser,
+    logoutUser,
+    refreshAccessToken,
+    getCurrentUser,
+};

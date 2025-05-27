@@ -4,6 +4,7 @@ import {
     loginUser,
     logoutUser,
     refreshAccessToken,
+    getCurrentUser,
 } from "../controllers/user.controller.js";
 import { verfiyJWT } from "../middlewares/auth.middleware.js";
 
@@ -13,5 +14,6 @@ router.route("/register").post(registerUser);
 router.route("/login").post(loginUser);
 router.route("/logout").get(verfiyJWT, logoutUser);
 router.route("/refresh-token").get(refreshAccessToken);
+router.route("/me").get(getCurrentUser);
 
 export default router;
