@@ -133,11 +133,11 @@ const loginUser = asyncHandler(
         // Validating the data
         if (
             (!username && !emailAddress) ||
-            (username.trim() === "" && emailAddress.trim() === "")
+            (username?.trim() === "" && emailAddress?.trim() === "")
         ) {
             throw new ApiError(400, "Username or Email Address are required");
         }
-        if (!password || password.trim() === "") {
+        if (!password || password?.trim() === "") {
             throw new ApiError(400, "Password is required");
         }
 
