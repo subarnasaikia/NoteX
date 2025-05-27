@@ -10,11 +10,32 @@ export const login = async (credentials: {
 };
 
 export const logout = async () => {
-  const response = await apiClient.post('/user/logout');
+  const response = await apiClient.get('/user/logout');
+  return response.data;
+};
+
+export const me = async () => {
+  const response = await apiClient.get('/user/me');
   return response.data;
 };
 
 export const refreshToken = async () => {
-  const response = await apiClient.post('/refresh-token');
+  const response = await apiClient.post('/user/refresh-token');
+  return response.data;
+};
+
+
+interface RegisterPayload {
+  username: string;
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  emailAddress: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export const registerUser = async (data: RegisterPayload) => {
+  const response = await apiClient.post('/user/register', data);
   return response.data;
 };
