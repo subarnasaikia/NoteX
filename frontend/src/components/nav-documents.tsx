@@ -5,6 +5,7 @@ import {
   IconFolder,
   IconShare3,
   IconTrash,
+  IconPlus,
   type Icon,
 } from "@tabler/icons-react"
 
@@ -15,6 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -27,26 +29,37 @@ import {
 
 export function NavDocuments({
   items,
+  onCreateFolderClick,
 }: {
   items: {
     name: string
     url: string
     icon: Icon
   }[]
+  onCreateFolderClick?: () => void
 }) {
   const { isMobile } = useSidebar()
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Documents</SidebarGroupLabel>
+      <div className="flex items-center justify-between pr-2">
+        <SidebarGroupLabel>Folders</SidebarGroupLabel>
+        <button
+          className="hover:text-primary transition-colors"
+          onClick={onCreateFolderClick}
+        >
+          <IconPlus size={18} />
+        </button>
+      </div>
+
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
               <a href={item.url}>
-                <item.icon />
-                <span>{item.name}</span>
-              </a>
+                {/* <item.icon /> */}
+<span className="font-mono text-sm text-foreground"> {item.name}</span>
+         </a>
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -80,6 +93,7 @@ export function NavDocuments({
             </DropdownMenu>
           </SidebarMenuItem>
         ))}
+
         <SidebarMenuItem>
           <SidebarMenuButton className="text-sidebar-foreground/70">
             <IconDots className="text-sidebar-foreground/70" />

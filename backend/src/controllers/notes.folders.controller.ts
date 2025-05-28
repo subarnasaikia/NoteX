@@ -174,6 +174,7 @@ const fetchFoldersWithPagination = asyncHandler(
                         {
                             $project: {
                                 body: 0,
+                                embedding: 0, // Exclude embedding if large
                             },
                         },
                     ],
@@ -353,7 +354,7 @@ const fetchContentsImagesFoldersForROOT = asyncHandler(
             ContentModel.find({
                 userId: req.user._id,
                 parentFolderId: null,
-            }).select("-body"), // exclude body if large
+            }).select("-embedding"), // exclude body if large
 
             ImageModel.find({
                 userId: req.user._id,
@@ -369,7 +370,7 @@ const fetchContentsImagesFoldersForROOT = asyncHandler(
         res.status(200).json(
             new ApiResponse(
                 200,
-                { folders, contents, images },
+                { contents, images },
                 "Contents fetched successfully!",
             ),
         );

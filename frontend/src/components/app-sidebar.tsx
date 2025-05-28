@@ -47,6 +47,12 @@ const data = {
       icon: IconDashboard,
     },
     {
+          title: "Folders",
+      url: "/dashboard/folders",
+      icon: IconFolder,
+
+    },
+    {
       title: "Revision",
       url: "/dashboard/revision",
       icon: IconListDetails,
@@ -56,6 +62,7 @@ const data = {
       url: "/dashboard/quiz",
       icon: IconChartBar,
     },
+
    
   ],
   // navClouds: [
@@ -125,17 +132,17 @@ const data = {
   ],
   documents: [
     {
-      name: "Data Library",
+      name: "/",
       url: "#",
       icon: IconDatabase,
     },
     {
-      name: "Reports",
+      name: "/Folder",
       url: "#",
       icon: IconReport,
     },
     {
-      name: "Word Assistant",
+      name: "/Folder 2",
       url: "#",
       icon: IconFileWord,
     },
