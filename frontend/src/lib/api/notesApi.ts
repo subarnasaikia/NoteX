@@ -28,10 +28,10 @@ export const updateContentById = async (contentId: string, data: {
   title: string;
   hex_color: string;
   body: any;
-  parentFolderId: string;
+  parentFolderId: string | null;
   tags?: string[];
 }) => {
-  const response = await apiClient.put(`/notes/update-content/${contentId}`, data);
+  const response = await apiClient.patch(`/notes/contents/update-content/${contentId}`, data);
   return response.data;
 };
 

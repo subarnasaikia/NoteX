@@ -1,4 +1,3 @@
-
 import {
   Card,
   CardContent,
@@ -48,9 +47,9 @@ export function NoteCard({ note }: { note: Note }) {
     try {
       await deleteContentById(note._id);
       setOpenDialog(false);
-      router.refresh();
+      location.reload();
+  
     } catch (error) {
-      // sonn.error("Failed to delete note:", error);
       toast.error("Failed to delete note. Please try again.");
     }
   };

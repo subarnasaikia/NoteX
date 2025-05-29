@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { isColorDark } from "@/lib/utils";
-import { createContent } from "@/lib/api/notesApi";
+import { createContent, updateContentById } from "@/lib/api/notesApi";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
@@ -15,7 +15,7 @@ interface NoteEditorProps {
   initialContent?: string;
   initialColor?: string;
   onColorChanged?: (color: string) => void;
-  editOrUpdate: "Edit" | "Update";
+  isUpdate: boolean;
 
 }
 
@@ -26,7 +26,7 @@ export function NoteEditor({
   initialContent = "",
   initialColor = "#ffffff",
   onColorChanged,
-  editOrUpdate = "Edit",
+  isUpdate = false,
 }: NoteEditorProps) {
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
@@ -67,6 +67,33 @@ const handleSave = async () => {
 
   try {
     await createContent(payload);
+    router.back();
+  } catch (error) {
+    console.error("Failed to create note:", error);
+    toast.error("Failed to create note. Please try again.");
+  }
+};
+
+const handleUpdate =   async () => {
+  if (!title.trim() || !content.trim()) {
+    toast.error("Note title and content cannot be empty");
+    return;
+  }
+
+  const payload = {
+    title: title || "Untitled Note",
+    hex_color: color,
+    body: {
+      type: noteType,
+      bodyContent: content || "",
+    },
+    parentFolderId,
+    tags: [],
+  };
+
+  try {
+    await updateContentById(
+     noteId ?? "", payload);
     router.back();
   } catch (error) {
     console.error("Failed to create note:", error);
@@ -148,7 +175,7 @@ const handleSave = async () => {
               Cancel
             </Button>
           {/* )} */}
-          <Button onClick={handleSave}>Save</Button>
+          <Button onClick={ isUpdate ? handleUpdate : handleSave }>{isUpdate ? "Update" : "Save"}</Button>
         </div>
       </div>
     </div>

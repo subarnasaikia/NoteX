@@ -27,12 +27,11 @@ useEffect(() => {
     if (noteId) {
       try {
         const res = await fetchContentById(noteId);
-        const fetchedNote = res.data;
+        const fetchedNote = res.data as Note;
 
-        setNote({
-          ...fetchedNote,
-          body: fetchedNote.body?.bodyContent || "", // ✅ Extract actual markdown content
-        });
+        setNote(
+         fetchedNote,
+        );
         setColor(fetchedNote.hex_color ?? "#ffffff");
       } catch (error) {
         console.error("Failed to fetch note", error);
@@ -77,8 +76,9 @@ useEffect(() => {
           initialTitle={note?.title || ""}
           initialContent={note?.body.bodyContent || ""}
           initialColor={note?.hex_color || "#ffffff"}
+
           onColorChanged={setColor} 
-          editOrUpdate={note ? "Edit" : "Update"}
+          isUpdate={note ? true : false}
 
 
 
