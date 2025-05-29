@@ -64,7 +64,9 @@ const fetchRevisionsHandler = asyncHandler(
         }
         const userId = req.user._id;
         const { page = 1, limit = 10 } = req.query;
-        const skip = (Number(page) - 1) * Number(limit);
+        const pageNumber = parseInt(page as string, 10);
+        const limitNumber = parseInt(limit as string, 10);
+        const skip = (pageNumber - 1) * Number(limit);
         const revisions = await RevisionModel.aggregate([
             {
                 $match: {
@@ -90,7 +92,7 @@ const fetchRevisionsHandler = asyncHandler(
                 $skip: skip,
             },
             {
-                $limit: Number(limit),
+                $limit: limitNumber,
             },
         ]);
         const totalRevisions = await RevisionModel.countDocuments({
@@ -139,8 +141,31 @@ const fetchRevisionByIdHandler = asyncHandler(
     },
 );
 
+const fetchAllRevisionsHandler = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+        if (!req.user) {
+            throw new ApiError(401, "User not authenticated!");
+        }
+        const userId = req.user._id;
+        const revisions = await RevisionModel.find({ userId: userId })
+            .select("-__v")
+            .sort({ createdAt: -1 });
+        if (!revisions || revisions.length === 0) {
+            throw new ApiError(404, "No revisions found for this user.");
+        }
+        res.status(200).json(
+            new ApiResponse(
+                200,
+                revisions,
+                "All revisions fetched successfully!",
+            ),
+        );
+    },
+);
+
 export {
     generateRevisionHandler,
     fetchRevisionsHandler,
     fetchRevisionByIdHandler,
+    fetchAllRevisionsHandler,
 };

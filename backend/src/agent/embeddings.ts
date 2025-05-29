@@ -59,11 +59,13 @@ export async function chunkContent(
  */
 export async function embedContent(
     content: string,
-    contentType: string,
+    contentType: string = "text",
 ): Promise<number[]> {
     const chunks = await chunkContent(content, contentType);
     if (chunks.length === 0) return [];
-    const embeddings = new OpenAIEmbeddings();
+    const embeddings = new OpenAIEmbeddings({
+        modelName: "text-embedding-ada-002",
+    });
     const vectors = await embeddings.embedDocuments(chunks);
     // Average the chunk embeddings component-wise
     const dim = vectors[0].length;

@@ -1,7 +1,8 @@
-import mongoose from "mongoose";
+import mongoose, { Aggregate } from "mongoose";
 import { MongoDBAtlasVectorSearch } from "@langchain/mongodb";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { Document } from "@langchain/core/documents";
+import { embedContent } from "./embeddings.js";
 
 /**
  * Perform a semantic search on the content collection.
@@ -26,5 +27,17 @@ export async function semanticSearch(
     });
     const retriever = vectorStore.asRetriever({ k });
     const results = await retriever.invoke(query);
+    // const queryVector = await embedContent(query);
+    // const results = await collection.aggregate([
+    //     {
+    //         $vectorSearch: {
+    //             index: "vector_index",
+    //             path: "embedding",
+    //             queryVector: queryVector,
+    //             numCandidates: k,
+    //             limit: k,
+    //         },
+    //     },
+    // ]);
     return results;
 }

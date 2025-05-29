@@ -4,6 +4,7 @@ import {
     generateRevisionHandler,
     fetchRevisionsHandler,
     fetchRevisionByIdHandler,
+    fetchAllRevisionsHandler,
 } from "../controllers/revision.controller.js";
 
 const router: Router = Router();
@@ -13,5 +14,6 @@ router
     .route("/fetch-revisions/page/:page/limit/:limit")
     .get(fetchRevisionsHandler);
 router.route("/fetch-revision/:revisionId").get(fetchRevisionByIdHandler);
+router.route("/fetch-all-revisions").get(fetchAllRevisionsHandler);
 
 export default router;

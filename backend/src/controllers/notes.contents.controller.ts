@@ -3,8 +3,11 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Request, Response } from "express";
 import ContentModel, { IContents } from "../models/notes.contents.model.js";
-import { semanticSearch } from "../agent/search.js";
+// import { semanticSearch } from "../agent/search.js";
 import User from "../models/users.model.js";
+import { embedContent } from "../agent/embeddings.js";
+// import { Types, ObjectId } from "mongoose";
+import { ObjectId } from "mongodb";
 
 // create new content
 const createContent = asyncHandler(
@@ -71,9 +74,9 @@ const fetchAllContents = asyncHandler(
         })
             .select("-__v -embedding")
             .sort({ createdAt: -1 });
-        if (!contents || contents.length === 0) {
-            throw new ApiError(404, "No contents found!");
-        }
+        // if (!contents || contents.length === 0) {
+        //     throw new ApiError(404, "No contents found!");
+        // }
         res.status(200).json(
             new ApiResponse(200, contents, "Contents fetched successfully!"),
         );
@@ -202,18 +205,36 @@ const searchContent = asyncHandler(
         if (!query) {
             throw new ApiError(400, "Query is required!");
         }
-        const results = await semanticSearch(query, 5);
+        // const results = await semanticSearch(query, 5);
+        const queryVector = await embedContent(query);
+        const results = await ContentModel.aggregate([
+            {
+                $vectorSearch: {
+                    index: "vector_index",
+                    path: "embedding",
+                    queryVector: queryVector,
+                    numCandidates: 50,
+                    limit: 5,
+                    // filter: {
+                    //     userId: userId, // Filter by authenticated user's ID
+                    // },
+                },
+            },
+        ]);
+
         if (!results) {
             throw new ApiError(404, "No results found!");
         }
+        // console.log(results);
         const contents = results.map((result) => {
             return {
-                _id: result.metadata._id,
-                title: result.metadata.title,
-                body: result.pageContent,
-                hex_color: result.metadata.hex_color,
-                parentFolderId: result.metadata.parentFolderId,
-                tags: result.metadata.tags,
+                _id: result._id,
+                userId: result.userId,
+                title: result.title,
+                body: result.body,
+                hex_color: result.hex_color,
+                parentFolderId: result.parentFolderId,
+                tags: result.tags,
             };
         });
         res.status(200).json(

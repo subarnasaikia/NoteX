@@ -124,4 +124,25 @@ const fetchQuizByIdHandler = asyncHandler(
     },
 );
 
-export { generateQuizHandler, fetchQuizzesHandler, fetchQuizByIdHandler };
+const fetchAllQuizHandler = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+        if (!req.user) {
+            throw new ApiError(401, "User not authenticated!");
+        }
+        const userId: ObjectId = req.user._id;
+        const quizzes = await QuizModel.find({ userId }).select("-__v");
+        if (!quizzes || quizzes.length === 0) {
+            throw new ApiError(404, "No quizzes found for this user.");
+        }
+        res.status(200).json(
+            new ApiResponse(200, quizzes, "Quizzes fetched successfully!"),
+        );
+    },
+);
+
+export {
+    generateQuizHandler,
+    fetchQuizzesHandler,
+    fetchQuizByIdHandler,
+    fetchAllQuizHandler,
+};

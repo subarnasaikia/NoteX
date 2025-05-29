@@ -24,7 +24,7 @@ export interface ExcalidrawContent {
 }
 export interface DocsContent {
     type: "docs";
-    bodyContent: any[]; // could be tiptap/Quill/Slate blocks, or custom format
+    bodyContent: string; // could be tiptap/Quill/Slate blocks, or custom format
 }
 
 export type ContentBody =
@@ -109,7 +109,7 @@ const docsBodySchema = new Schema(
         //     default: "docs",
         // },
         bodyContent: {
-            type: [Schema.Types.Mixed],
+            type: String,
             required: true,
         },
     },
