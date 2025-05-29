@@ -12,7 +12,7 @@ const envConfig: AppConfig = loadConfig();
 
 app.use(
     cors({
-        origin: "http://localhost:3000",
+        origin: envConfig.server.cors_origin,
         credentials: true,
     }),
 );
@@ -38,6 +38,7 @@ import notespinRouter from "./routes/notes.pins.route.js";
 import notesImageRouter from "./routes/notes.images.route.js";
 import quizRouter from "./routes/quiz.route.js";
 import revisionRouter from "./routes/revision.route.js";
+import e from "cors";
 
 // routes declariation
 app.use("/api/v1/user", userRouter);
