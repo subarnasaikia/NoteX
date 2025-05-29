@@ -16,6 +16,7 @@ import { isColorDark } from "@/lib/utils";
 import { fetchFoldersWithPagination, fetchRootContents } from "@/lib/api/foldersApi";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { Note, FolderData } from "@/types";
+import { NoteCard } from "@/components/note-card";
 
 export default function Page() {
   const router = useRouter();
@@ -130,33 +131,35 @@ useEffect(() => {
                 const mutedText = isDark ? "text-white/70" : "text-black/60";
 
                 return (
-                  <Card
-                    key={note._id}
-                    className={`w-full rounded-2xl p-4 py-8 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.01] hover:-translate-y-1 ${textColor}`}
-                    style={{ backgroundColor: note.hex_color }}
-                  >
-                    <CardHeader className="relative pb-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleEdit(String(note._id))}
-                        className={`absolute top-2 right-2 hover:bg-black/10 ${
-                          isDark ? "text-white hover:text-white" : "text-black hover:text-black"
-                        }`}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <CardTitle className="truncate text-lg font-semibold max-w-[180px]">
-                        {note.title}
-                      </CardTitle>
-                      <CardDescription className={`text-xs ${mutedText}`}>
-                        Created on {note.createdAt}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className={`line-clamp-4 text-sm ${mutedText}`}>
-                      {note.body.bodyContent}
-                    </CardContent>
-                  </Card>
+                  <NoteCard key={note._id} note={note} />
+
+                  // <Card
+                  //   key={note._id}
+                  //   className={`w-full rounded-2xl p-4 py-8 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.01] hover:-translate-y-1 ${textColor}`}
+                  //   style={{ backgroundColor: note.hex_color }}
+                  // >
+                  //   <CardHeader className="relative pb-2">
+                  //     <Button
+                  //       variant="ghost"
+                  //       size="icon"
+                  //       onClick={() => handleEdit(String(note._id))}
+                  //       className={`absolute top-2 right-2 hover:bg-black/10 ${
+                  //         isDark ? "text-white hover:text-white" : "text-black hover:text-black"
+                  //       }`}
+                  //     >
+                  //       <Edit className="h-4 w-4" />
+                  //     </Button>
+                  //     <CardTitle className="truncate text-lg font-semibold max-w-[180px]">
+                  //       {note.title}
+                  //     </CardTitle>
+                  //     <CardDescription className={`text-xs ${mutedText}`}>
+                  //       Created on {note.createdAt}
+                  //     </CardDescription>
+                  //   </CardHeader>
+                  //   <CardContent className={`line-clamp-4 text-sm ${mutedText}`}>
+                  //     {note.body.bodyContent}
+                  //   </CardContent>
+                  // </Card>
                 );
               })}
             </div>
