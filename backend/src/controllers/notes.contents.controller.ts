@@ -4,6 +4,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { Request, Response } from "express";
 import ContentModel, { IContents } from "../models/notes.contents.model.js";
 import { semanticSearch } from "../agent/search.js";
+import User from "../models/users.model.js";
 
 // create new content
 const createContent = asyncHandler(
@@ -57,7 +58,27 @@ const createContent = asyncHandler(
     },
 );
 
-// fetch or read the  contents as page
+// fetch or read the  contents
+
+const fetchAllContents = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+        if (!req.user) {
+            throw new ApiError(401, "User not authenticated!");
+        }
+        // TODO(subarna): checking if user's email is verified
+        const contents: IContents[] = await ContentModel.find({
+            userId: req.user?._id,
+        })
+            .select("-__v -embedding")
+            .sort({ createdAt: -1 });
+        if (!contents || contents.length === 0) {
+            throw new ApiError(404, "No contents found!");
+        }
+        res.status(200).json(
+            new ApiResponse(200, contents, "Contents fetched successfully!"),
+        );
+    },
+);
 
 // fetch content using contentId
 const fetchContentUsingId = asyncHandler(
@@ -207,4 +228,5 @@ export {
     updateContentUsingId,
     deleteContentUsingId,
     searchContent,
+    fetchAllContents,
 };
