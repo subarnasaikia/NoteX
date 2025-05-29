@@ -76,8 +76,15 @@ const handleSubmit = async () => {
       }
     );
 
-    router.back();
+    if (document.referrer) {
+    window.location.href = document.referrer;
+  } else {
+    // Fallback: go to homepage
+    window.location.href = "/";
+  }
 
+//     router.back();
+// router.refresh();
     
 
     // Optionally handle response

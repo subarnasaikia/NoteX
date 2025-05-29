@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider"
 
 export const metadata: Metadata = {
-  title: "NoteX Editor",
+  title: "NoteX",
   description: "AI note taking app editor.",
 };
 
