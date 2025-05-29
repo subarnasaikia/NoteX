@@ -11,3 +11,18 @@ export const fetchAllQuizzes = async () => {
   return response.data;
 };
 
+export const fetchQuizById = async (quizId: string) => {
+  const response = await apiClient.get(`/quiz/fetch-quiz/${quizId}`);
+  return response.data;
+};
+
+export const submitQuiz = async (data: { quizId: string; answers: string[] }) => {
+  const response = await apiClient.post("/quiz/submit-quiz", data);
+  return response.data;
+};
+
+export const fetchQuizResults = async (quizId: string) => {
+  const response = await apiClient.get(`/quiz/results/${quizId}`);
+  return response.data;
+};
+

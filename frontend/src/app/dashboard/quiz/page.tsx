@@ -150,7 +150,7 @@ export default function FlashcardRevision() {
                   {quiz.title}
                 </h3>
                 <p className="text-muted-foreground text-sm">
-                  Based on: <span className="font-medium">{quiz.title}</span>
+                  Based on: <span className="font-medium">{quiz.tags.join(", ")}</span>
                 </p>
 
                 <div className="mt-3 flex items-center gap-2">

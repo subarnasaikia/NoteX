@@ -43,3 +43,10 @@ export type Revision = {
 	createdAt: string;
 	updatedAt: string;
 };
+
+export type QuizQuestion = {
+  question: string;
+  options: string[];
+  answer: string;
+  explanation: string;
+};
