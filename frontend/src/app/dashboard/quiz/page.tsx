@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { BarChart2 } from "lucide-react";
+import { QuizResultsDialog } from "@/components/quiz-results-dialog";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -43,6 +44,7 @@ export default function FlashcardRevision() {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+const [openResultDialog, setOpenResultDialog] = useState<null | string>(null);
 
   useEffect(() => {
     const getNotes = async () => {
@@ -160,29 +162,36 @@ export default function FlashcardRevision() {
                     </Button>
                   </Link>
 
-                  {quiz.isAppeared && (
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Link href={`/quiz/${quiz._id}/results`}>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="transition hover:bg-muted hover:text-primary"
-                            >
-                              <BarChart2 className="w-5 h-5" />
-                            </Button>
-                          </Link>
-                        </TooltipTrigger>
-                        <TooltipContent>View Results</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  )}
+             {quiz.isAppeared && (
+  <TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="transition hover:bg-muted hover:text-primary"
+          onClick={() => setOpenResultDialog(quiz._id)}
+        >
+          <BarChart2 className="w-5 h-5" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>View Results</TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+)}
                 </div>
               </div>
             </Card>
           ))}
         </div>
+
+        {openResultDialog && (
+  <QuizResultsDialog
+    quizId={openResultDialog}
+    open={!!openResultDialog}
+    onOpenChange={(val) => !val && setOpenResultDialog(null)}
+  />
+)}
       </div>
     </main>
   );

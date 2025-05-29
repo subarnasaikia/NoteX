@@ -22,7 +22,7 @@ export const submitQuiz = async (data: { quizId: string; answers: string[] }) =>
 };
 
 export const fetchQuizResults = async (quizId: string) => {
-  const response = await apiClient.get(`/quiz/results/${quizId}`);
+  const response = await apiClient.get(`/quiz/fetch-results/${quizId}`);
   return response.data;
 };
 
