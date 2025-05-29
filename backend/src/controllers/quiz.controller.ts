@@ -6,6 +6,7 @@ import { generateQuiz } from "../agent/quiz.js";
 import mongoose, { ObjectId } from "mongoose";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
+import QuizResultModel from "../models/quizResult.model.js";
 
 const generateQuizHandler = asyncHandler(
     async (req: Request, res: Response): Promise<void> => {
@@ -130,12 +131,157 @@ const fetchAllQuizHandler = asyncHandler(
             throw new ApiError(401, "User not authenticated!");
         }
         const userId: ObjectId = req.user._id;
-        const quizzes = await QuizModel.find({ userId }).select("-__v");
-        if (!quizzes || quizzes.length === 0) {
-            throw new ApiError(404, "No quizzes found for this user.");
-        }
+        const quizzes = await QuizModel.find({ userId }).select("-__v -body");
+        // if (!quizzes || quizzes.length === 0) {
+        //     throw new ApiError(404, "No quizzes found for this user.");
+        // }
         res.status(200).json(
             new ApiResponse(200, quizzes, "Quizzes fetched successfully!"),
+        );
+    },
+);
+
+const submitQuizHandler = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+        if (!req.user) {
+            throw new ApiError(401, "User not authenticated!");
+        }
+
+        const { quizId, answers } = req.body;
+
+        if (!quizId || !answers || !Array.isArray(answers)) {
+            throw new ApiError(400, "Quiz ID and answers are required.");
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(quizId)) {
+            throw new ApiError(400, "Invalid Quiz ID.");
+        }
+
+        const quiz = await QuizModel.findById(quizId);
+        if (!quiz) {
+            throw new ApiError(404, "Quiz not found.");
+        }
+
+        if (answers.length !== quiz.body.length) {
+            throw new ApiError(
+                400,
+                "Number of answers does not match number of questions.",
+            );
+        }
+
+        let correctCount = 0;
+        const answeredQuestions = answers.map((answer, index) => {
+            const isCorrect = quiz.body[index].answer === answer;
+            if (isCorrect) correctCount++;
+            return {
+                questionIndex: index,
+                selectedOption: answer,
+                isCorrect,
+            };
+        });
+
+        // Save or update the result
+        const existingResult = await QuizResultModel.findOne({
+            userId: req.user._id,
+            quizId: quiz._id,
+        });
+
+        if (existingResult) {
+            existingResult.correctCount = correctCount;
+            existingResult.answers = answeredQuestions;
+            existingResult.totalQuestions = quiz.body.length;
+            existingResult.submittedAt = new Date();
+            await existingResult.save();
+            res.status(200).json(
+                new ApiResponse(
+                    200,
+                    existingResult,
+                    "Quiz result updated successfully!",
+                ),
+            );
+        } else {
+            const quizResult = await QuizResultModel.create({
+                userId: req.user._id,
+                quizId: quiz._id,
+                correctCount,
+                totalQuestions: quiz.body.length,
+                answers: answeredQuestions,
+                submittedAt: new Date(),
+            });
+
+            res.status(201).json(
+                new ApiResponse(
+                    201,
+                    quizResult,
+                    "Quiz submitted successfully!",
+                ),
+            );
+        }
+    },
+);
+
+const fetchResultsHandler = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+        if (!req.user) {
+            throw new ApiError(401, "User not authenticated!");
+        }
+
+        const userId: ObjectId = req.user._id;
+        const quizId = req.params.quizId;
+
+        if (!quizId) {
+            throw new ApiError(400, "Quiz ID is required.");
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(quizId)) {
+            throw new ApiError(400, "Invalid Quiz ID.");
+        }
+
+        const [quiz, result] = await Promise.all([
+            QuizModel.findById(quizId),
+            QuizResultModel.findOne({ userId, quizId }).sort({
+                submittedAt: -1,
+            }),
+        ]);
+
+        if (!quiz) {
+            throw new ApiError(404, "Quiz not found.");
+        }
+
+        if (!result) {
+            throw new ApiError(404, "No result found for this quiz.");
+        }
+
+        // Merge quiz question details with user answers
+        const detailedResults = quiz.body.map((q, index) => {
+            const userAnswer = result.answers.find(
+                (a) => a.questionIndex === index,
+            );
+            return {
+                questionIndex: index,
+                question: q.question,
+                options: q.options,
+                correctAnswer: q.answer,
+                explanation: q.explanation,
+                selectedOption: userAnswer?.selectedOption || null,
+                isCorrect: userAnswer?.isCorrect || false,
+            };
+        });
+
+        res.status(200).json(
+            new ApiResponse(
+                200,
+                {
+                    quizId: quiz._id,
+                    title: quiz.title,
+                    hex_color: quiz.hex_color,
+                    totalQuestions: quiz.body.length,
+                    correctCount: result.correctCount,
+                    submittedAt: result.submittedAt,
+                    detailedResults,
+                },
+                "Quiz result fetched successfully.",
+            ),
         );
     },
 );
@@ -145,4 +291,6 @@ export {
     fetchQuizzesHandler,
     fetchQuizByIdHandler,
     fetchAllQuizHandler,
+    submitQuizHandler,
+    fetchResultsHandler,
 };

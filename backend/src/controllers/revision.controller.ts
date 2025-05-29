@@ -150,9 +150,9 @@ const fetchAllRevisionsHandler = asyncHandler(
         const revisions = await RevisionModel.find({ userId: userId })
             .select("-__v")
             .sort({ createdAt: -1 });
-        if (!revisions || revisions.length === 0) {
-            throw new ApiError(404, "No revisions found for this user.");
-        }
+        // if (!revisions || revisions.length === 0) {
+        //     throw new ApiError(404, "No revisions found for this user.");
+        // }
         res.status(200).json(
             new ApiResponse(
                 200,

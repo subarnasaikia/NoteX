@@ -225,8 +225,11 @@ const searchContent = asyncHandler(
         if (!results) {
             throw new ApiError(404, "No results found!");
         }
+        const userContents = results.filter(
+            (result) => result.userId.toString() === req.user?._id.toString(),
+        );
         // console.log(results);
-        const contents = results.map((result) => {
+        const contents = userContents.map((result) => {
             return {
                 _id: result._id,
                 userId: result.userId,
