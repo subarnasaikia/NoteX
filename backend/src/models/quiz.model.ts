@@ -13,7 +13,7 @@ export interface IQuiz extends Document {
     hex_color: string;
     body: QuizBody[];
     tags: string[];
-    isApperared?: boolean;
+    isAppeared?: boolean;
     userId: ObjectId;
     createdAt: Date;
     updatedAt: Date;
@@ -59,7 +59,7 @@ const quizSchema = new Schema<IQuiz>(
             type: [String],
             default: [],
         },
-        isApperared: {
+        isAppeared: {
             type: Boolean,
             default: false,
         },

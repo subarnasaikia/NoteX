@@ -188,7 +188,7 @@ const submitQuizHandler = asyncHandler(
         });
 
         // update quiz as appeared
-        quiz.isApperared = true;
+        quiz.isAppeared = true;
         await quiz.save();
 
         if (existingResult) {
