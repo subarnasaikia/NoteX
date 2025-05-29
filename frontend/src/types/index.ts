@@ -22,3 +22,15 @@ export interface FolderData {
   createdAt: string;
   updatedAt: string;
 }
+
+
+export type Quiz = {
+  _id: string;
+  title: string;
+  hex_color: string;
+  tags: string[];
+  isAppeared: boolean;
+  userId: string;
+  createdAt: string; // or `Date` if you're parsing it
+  updatedAt: string; // or `Date` if you're parsing it
+};
