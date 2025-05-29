@@ -6,6 +6,7 @@ import {
     updateContentUsingId,
     deleteContentUsingId,
     searchContent,
+    fetchAllContents,
 } from "../controllers/notes.contents.controller.js";
 
 const router: Router = Router();
@@ -15,5 +16,6 @@ router.route("/fetch-content/:contentId").get(fetchContentUsingId);
 router.route("/update-content/:contentId").patch(updateContentUsingId);
 router.route("/delete-content/:contentId").delete(deleteContentUsingId);
 router.route("/search-content").post(searchContent);
+router.route("/fetch-all-contents").get(fetchAllContents);
 
 export default router;

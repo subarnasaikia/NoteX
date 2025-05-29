@@ -33,11 +33,11 @@ const generateQuizHandler = asyncHandler(
         }
 
         const saveQuiz = await QuizModel.create({
-            titile: `Quiz for ${content.title}`,
+            title: `Quiz for ${content.title}`,
             hex_color: "#000000", // Example color
             body: quiz,
             tags: ["quiz", "generated"],
-            UserId: req.user?._id,
+            userId: req.user._id,
         });
 
         if (!saveQuiz) {

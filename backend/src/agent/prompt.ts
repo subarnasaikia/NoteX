@@ -7,7 +7,7 @@ import { ChatPromptTemplate } from "@langchain/core/prompts";
 export const revisionChatPrompt = ChatPromptTemplate.fromMessages([
     [
         "system",
-        "You are an educational assistant. Given study content, generate a revision plan. For each item, output JSON with {question, answer}. Use the content to form clear questions and answers.",
+        "You are an educational assistant. Given study content, generate a revision plan. For each item, output JSON with {{question, answer}}. Use the content to form clear questions and answers.",
     ],
     [
         "human",
@@ -21,7 +21,7 @@ export const revisionChatPrompt = ChatPromptTemplate.fromMessages([
 export const quizChatPrompt = ChatPromptTemplate.fromMessages([
     [
         "system",
-        "You are a helpful tutor. Given study content, generate a quiz. Provide {numQuestions} MCQ questions. For each, output JSON with {question, options, answer, explanation}.",
+        "You are a helpful tutor. Given study content, generate a quiz. Provide {numQuestions} MCQ questions. For each, output JSON with {{question, options, answer, explanation}}.",
     ],
     [
         "human",
