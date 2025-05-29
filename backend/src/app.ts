@@ -38,7 +38,6 @@ import notespinRouter from "./routes/notes.pins.route.js";
 import notesImageRouter from "./routes/notes.images.route.js";
 import quizRouter from "./routes/quiz.route.js";
 import revisionRouter from "./routes/revision.route.js";
-import e from "cors";
 
 // routes declariation
 app.use("/api/v1/user", userRouter);
