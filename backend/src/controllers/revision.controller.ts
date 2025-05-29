@@ -12,7 +12,7 @@ const generateRevisionHandler = asyncHandler(
         if (!req.user) {
             throw new ApiError(401, "User not authenticated!");
         }
-        const { contentId, numQuestions = 5 } = req.body;
+        const { contentId, numQuestions = 10 } = req.body;
         if (!contentId) {
             throw new ApiError(400, "Content ID is required.");
         }

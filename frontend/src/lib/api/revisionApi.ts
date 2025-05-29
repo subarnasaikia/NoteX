@@ -12,3 +12,10 @@ export const fetchAllRevisions = async () => {
 	const response = await apiClient.get("/revision/fetch-all-revisions");
 	return response.data;
 };
+
+export const fetchRevisionById = async (revisionId: string) => {
+	const response = await apiClient.get(
+		`/revision/fetch-revision/${revisionId}`
+	);
+	return response.data;
+};

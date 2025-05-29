@@ -44,9 +44,14 @@ export type Revision = {
 	updatedAt: string;
 };
 
+export type RevisionBody = {
+	question: string;
+	answer: string;
+};
+
 export type QuizQuestion = {
-  question: string;
-  options: string[];
-  answer: string;
-  explanation: string;
+	question: string;
+	options: string[];
+	answer: string;
+	explanation: string;
 };
