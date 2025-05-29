@@ -39,6 +39,7 @@ const generateQuizHandler = asyncHandler(
             body: quiz,
             tags: ["quiz", "generated"],
             userId: req.user._id,
+            isApperared: false,
         });
 
         if (!saveQuiz) {
@@ -185,6 +186,10 @@ const submitQuizHandler = asyncHandler(
             userId: req.user._id,
             quizId: quiz._id,
         });
+
+        // update quiz as appeared
+        quiz.isApperared = true;
+        await quiz.save();
 
         if (existingResult) {
             existingResult.correctCount = correctCount;

@@ -13,6 +13,7 @@ export interface IQuiz extends Document {
     hex_color: string;
     body: QuizBody[];
     tags: string[];
+    isApperared?: boolean;
     userId: ObjectId;
     createdAt: Date;
     updatedAt: Date;
@@ -57,6 +58,10 @@ const quizSchema = new Schema<IQuiz>(
         tags: {
             type: [String],
             default: [],
+        },
+        isApperared: {
+            type: Boolean,
+            default: false,
         },
         userId: {
             type: mongoose.Schema.Types.ObjectId,
