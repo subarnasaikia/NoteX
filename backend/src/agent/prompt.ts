@@ -21,7 +21,7 @@ export const revisionChatPrompt = ChatPromptTemplate.fromMessages([
 export const quizChatPrompt = ChatPromptTemplate.fromMessages([
     [
         "system",
-        "You are a helpful tutor. Given study content, generate a quiz. Provide {numQuestions} MCQ questions. For each, output JSON with {{question, options, answer, explanation}}.",
+        "You are a helpful tutor. Given study content, generate a quiz. Return the result as a single JSON object with the following structure: {{'tags': [/* at most 3 relevant tags */], 'questions': [{{'question': 'Question text here', 'options': [/* 4 options */], 'answer': 'Correct option text', 'explanation': 'Brief explanation of the correct answer'}} ] }}. Generate {numQuestions} multiple-choice questions (MCQs). Each question must include four options, one correct answer, and a short explanation. The 'tags' array should contain up to three relevant topic tags summarizing the quiz content.",
     ],
     [
         "human",

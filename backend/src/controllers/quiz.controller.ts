@@ -28,16 +28,32 @@ const generateQuizHandler = asyncHandler(
         if (!contentText) {
             throw new ApiError(400, "Content text is required.");
         }
-        const quiz = await generateQuiz(contentText, numQuestions);
-        if (!quiz || quiz.length === 0) {
+        const generatedQuiz = await generateQuiz(contentText, numQuestions);
+        if (!generatedQuiz || !Array.isArray(generatedQuiz.questions)) {
             throw new ApiError(500, "Failed to generate quiz.");
+        }
+
+        const quiz = generatedQuiz.questions.map((q) => ({
+            question: q.question,
+            options: q.options,
+            answer: q.answer,
+            explanation: q.explanation,
+        }));
+
+        const tags = generatedQuiz.tags || [];
+        // if (!Array.isArray(tags) || tags.length === 0) {
+        //     throw new ApiError(400, "Quiz tags are required.");
+        // }
+
+        if (quiz.length === 0) {
+            throw new ApiError(500, "Generated quiz is empty.");
         }
 
         const saveQuiz = await QuizModel.create({
             title: `Quiz for ${content.title}`,
             hex_color: "#000000", // Example color
             body: quiz,
-            tags: ["quiz", "generated"],
+            tags: tags,
             userId: req.user._id,
             isApperared: false,
         });
