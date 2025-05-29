@@ -6,21 +6,17 @@ import { Button } from "@/components/ui/button";
 import { NoteEditor } from "@/components/note-editor";
 import { useEffect, useState } from "react";
 import { isColorDark } from "@/lib/utils";
-import { fetchContentById } from "@/lib/api/notesApi"; // ✅ Import your API call
+import { fetchContentById, createContent } from "@/lib/api/notesApi"; 
+import { Note } from "@/types";
 
-interface Note {
-  _id: string;
-  title: string;
-  body: string;
-  hex_color: string;
-  parentFolderId?: string;
-  tags?: string[];
-}
+
 
 export default function EditorPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const noteId = searchParams.get("id");
+  const noteType = searchParams.get("type") || "docs";
+  const parentFolderId = searchParams.get("parentFolderId") || null;
 
   const [note, setNote] = useState<Note | null>(null);
   const [color, setColor] = useState<string>("#ffffff");
@@ -40,7 +36,7 @@ useEffect(() => {
         setColor(fetchedNote.hex_color ?? "#ffffff");
       } catch (error) {
         console.error("Failed to fetch note", error);
-        router.push("/dashboard");
+        router.back(); // Navigate back if note not found
       } finally {
         setLoading(false);
       }
@@ -53,11 +49,7 @@ useEffect(() => {
 
   const isDark = isColorDark(color);
 
-  const handleSave = (note: { title: string; content: string }) => {
-    console.log("Saving note:", note);
-    // TODO: Call updateContentById or createContent API
-    router.push("/dashboard");
-  };
+
 
   if (loading) return <div className="p-4">Loading...</div>;
 
@@ -83,11 +75,13 @@ useEffect(() => {
       <main className="flex-1 overflow-auto">
         <NoteEditor
           initialTitle={note?.title || ""}
-          initialContent={note?.body || ""}
+          initialContent={note?.body.bodyContent || ""}
           initialColor={note?.hex_color || "#ffffff"}
-          onSave={handleSave}
-          onColorChanged={setColor}
-          onCancel={() => router.push("/dashboard")}
+          onColorChanged={setColor} 
+          editOrUpdate={note ? "Edit" : "Update"}
+
+
+
         />
       </main>
     </div>

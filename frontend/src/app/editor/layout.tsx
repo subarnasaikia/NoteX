@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "NoteX Editor",
@@ -18,6 +19,7 @@ export default function EditorLayout({ children }: Readonly<{
     >
       <div className="min-h-screen bg-background">
         {children}
+
       </div>
     </ThemeProvider>
   )

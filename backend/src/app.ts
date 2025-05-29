@@ -12,7 +12,7 @@ const envConfig: AppConfig = loadConfig();
 
 app.use(
     cors({
-        origin: envConfig.server.cors_origin,
+        origin: "http://localhost:3000",
         credentials: true,
     }),
 );

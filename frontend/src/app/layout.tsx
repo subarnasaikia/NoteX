@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 
 export const metadata: Metadata = {
@@ -25,6 +26,8 @@ export default function RootLayout({ children }: Readonly<{
             disableTransitionOnChange
           >
             {children}
+            <Toaster richColors position="top-center" />
+
           </ThemeProvider>
         </body>
       </html>

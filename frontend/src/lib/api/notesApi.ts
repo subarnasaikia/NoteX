@@ -13,6 +13,11 @@ export const createContent = async (data: {
 };
 
 
+export const fetchAllContents = async () => {
+  const response = await apiClient.get("notes/contents/fetch-all-contents");
+  return response.data;
+}
+
 export const fetchContentById = async (contentId: string) => {
   const response = await apiClient.get(`notes/contents/fetch-content/${contentId}`);
   return response.data;
@@ -32,7 +37,7 @@ export const updateContentById = async (contentId: string, data: {
 
 
 export const deleteContentById = async (contentId: string) => {
-  const response = await apiClient.delete(`/notes/delete-content/${contentId}`);
+  const response = await apiClient.delete(`/notes/contents/delete-content/${contentId}`);
   return response.data;
 };
 

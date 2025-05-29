@@ -5,14 +5,18 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { isColorDark } from "@/lib/utils";
+import { createContent } from "@/lib/api/notesApi";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
+
 
 interface NoteEditorProps {
   initialTitle?: string;
   initialContent?: string;
   initialColor?: string;
   onColorChanged?: (color: string) => void;
-  onSave?: (note: { title: string; content: string; color: string }) => void;
-  onCancel?: () => void;
+  editOrUpdate: "Edit" | "Update";
+
 }
 
 
@@ -22,8 +26,7 @@ export function NoteEditor({
   initialContent = "",
   initialColor = "#ffffff",
   onColorChanged,
-  onSave,
-  onCancel,
+  editOrUpdate = "Edit",
 }: NoteEditorProps) {
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
@@ -33,15 +36,47 @@ export function NoteEditor({
   const textColor = isDark ? "text-white" : "text-black";
   const placeholderColor = isDark ? "placeholder-white/70" : "placeholder-black/50";
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const noteId = searchParams.get("id");
+  const noteType = searchParams.get("type") || "docs";
+  const parentFolderId = searchParams.get("parentFolderId") || null;
+
+
   const handleColorChange = (newColor: string) => {
     setColor(newColor);
     onColorChanged?.(newColor);
   };
 
-  const handleSave = () => {
-    onSave?.({ title, content, color });
+const handleSave = async () => {
+  if (!title.trim() || !content.trim()) {
+    toast.error("Note title and content cannot be empty");
+    return;
+  }
+
+  const payload = {
+    title: title || "Untitled Note",
+    hex_color: color,
+    body: {
+      type: noteType,
+      bodyContent: content || "",
+    },
+    parentFolderId,
+    tags: [],
   };
 
+  try {
+    await createContent(payload);
+    router.back();
+  } catch (error) {
+    console.error("Failed to create note:", error);
+    toast.error("Failed to create note. Please try again.");
+  }
+};
+
+
+
+   
   const colorOptions = [
     "#ffffff",
     "#f8f9fa",
@@ -108,11 +143,11 @@ export function NoteEditor({
         </div>
 
         <div className="flex gap-2">
-          {onCancel && (
-            <Button variant="outline" className="text-black" onClick={onCancel}>
+          {/* {onCancel && ( */}
+            <Button  className="text-black" onClick={() => router.back()}>
               Cancel
             </Button>
-          )}
+          {/* )} */}
           <Button onClick={handleSave}>Save</Button>
         </div>
       </div>
