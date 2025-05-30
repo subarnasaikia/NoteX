@@ -63,7 +63,7 @@ export function CommandMenu() {
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
       <CommandInput
-        placeholder="Search your notes, flashcards, or content..."
+        placeholder="Search your notes, or its content..."
         value={query}
         onValueChange={setQuery}
       />
