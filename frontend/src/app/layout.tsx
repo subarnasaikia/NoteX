@@ -28,7 +28,6 @@ export default function RootLayout({ children }: Readonly<{
             {children}
             <Toaster richColors position="top-center" />
             <CommandMenu />
-            {children}
           </ThemeProvider>
         </body>
       </html>
