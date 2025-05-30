@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { CommandMenu } from "@/components/commandMenu";
+import { CommandMenu } from "@/components/command-menu";
 
 export const metadata: Metadata = {
   title: "NoteX",

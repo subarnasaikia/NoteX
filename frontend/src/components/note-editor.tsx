@@ -9,7 +9,8 @@ import { createContent, updateContentById } from "@/lib/api/notesApi";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import dynamic from "next/dynamic";
-import "../app/mdeditor.css"; // Ensure this path is correct based on your project structure
+import "../app/mdeditor.css";
+import { LatexEditor } from "./latex-editor"; 
 
 interface NoteEditorProps {
   initialTitle?: string;
@@ -34,9 +35,9 @@ export function NoteEditor({
   const [content, setContent] = useState(initialContent ?? "");
   const [color, setColor] = useState(initialColor);
 
-  const LatexEditor = ({ value, onChange }: { value: string, onChange: (val: string) => void }) => (
-  <Textarea value={value} onChange={(e) => onChange(e.target.value)} placeholder="Write LaTeX here..." />
-);
+//   const LatexEditor = ({ value, onChange }: { value: string, onChange: (val: string) => void }) => (
+//   <Textarea value={value} onChange={(e) => onChange(e.target.value)} placeholder="Write LaTeX here..." />
+// );
 
   const isDark = isColorDark(color);
   const textColor = isDark ? "text-white" : "text-black";
