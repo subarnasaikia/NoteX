@@ -8,7 +8,8 @@ import { isColorDark } from "@/lib/utils";
 import { createContent, updateContentById } from "@/lib/api/notesApi";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-
+import dynamic from "next/dynamic";
+import "../app/mdeditor.css"; // Ensure this path is correct based on your project structure
 
 interface NoteEditorProps {
   initialTitle?: string;
@@ -19,6 +20,7 @@ interface NoteEditorProps {
 
 }
 
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 
 export function NoteEditor({
@@ -29,8 +31,12 @@ export function NoteEditor({
   isUpdate = false,
 }: NoteEditorProps) {
   const [title, setTitle] = useState(initialTitle);
-  const [content, setContent] = useState(initialContent);
+  const [content, setContent] = useState(initialContent ?? "");
   const [color, setColor] = useState(initialColor);
+
+  const LatexEditor = ({ value, onChange }: { value: string, onChange: (val: string) => void }) => (
+  <Textarea value={value} onChange={(e) => onChange(e.target.value)} placeholder="Write LaTeX here..." />
+);
 
   const isDark = isColorDark(color);
   const textColor = isDark ? "text-white" : "text-black";
@@ -131,13 +137,34 @@ const handleUpdate =   async () => {
         />
       </div>
 
-      <Textarea
+
+<div className="px-4 flex-1">
+  {noteType === "latex" ? (
+    <LatexEditor value={content} onChange={setContent} />
+  ) : noteType === "markdown" ? (
+    <div data-color-mode={isDark ? "dark" : "light"}>
+      <MDEditor value={content}   onChange={(val) => setContent(val || "")}
+ height={500} />
+    </div>
+  ) : (
+    <Textarea
+      value={content}
+      onChange={(e) => setContent(e.target.value)}
+      placeholder="Write your note here..."
+      className={`text-base flex-1 w-full border-none bg-transparent shadow-none focus-visible:ring-0 focus:outline-none p-0 px-4 m-0 rounded-none resize-none custom-input ${textColor}`}
+      style={{ "--placeholder-color": isDark ? "#ffffffb3" : "#00000080" } as React.CSSProperties}
+    />
+  )}
+</div>
+
+
+      {/* <Textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="Write your note here..."
         className={`text-base flex-1 w-full border-none bg-transparent shadow-none focus-visible:ring-0 focus:outline-none p-0 px-4  m-0 rounded-none resize-none custom-input ${textColor}`}
         style={{ "--placeholder-color": isDark ? "#ffffffb3" : "#00000080" } as React.CSSProperties}
-      />
+      /> */}
 
          <div className="fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-md border-t border-gray-200 p-3 flex justify-between items-center z-10">
         <div className="flex items-center gap-2">
@@ -171,7 +198,7 @@ const handleUpdate =   async () => {
 
         <div className="flex gap-2">
           {/* {onCancel && ( */}
-            <Button  className="text-black" onClick={() => router.back()}>
+            <Button  className="text-white" onClick={() => router.back()}>
               Cancel
             </Button>
           {/* )} */}

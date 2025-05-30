@@ -1,0 +1,50 @@
+/* === WMD Editor Toolbar Customization === */
+.w-md-editor-toolbar {
+  height: 56px !important;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Toolbar buttons */
+.w-md-editor-toolbar ul li {
+  margin-right: 6px !important;
+}
+
+.w-md-editor-toolbar ul li:first-child {
+  margin-left: 6px !important;
+}
+
+.w-md-editor-toolbar ul li:last-child {
+  margin-right: 6px !important;
+}
+
+.w-md-editor-toolbar ul li > button {
+  font-size: 20px !important;
+  padding: 12px !important;
+  width: 48px !important;
+  height: 48px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.w-md-editor-toolbar ul li > button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.w-md-editor-toolbar ul li > button:hover {
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+/* Optional: Dark mode support */
+.dark .w-md-editor-toolbar {
+  background-color: #1f1f1f;
+  border-color: #333;
+}
+
+.dark .w-md-editor-toolbar ul li > button:hover {
+  background-color: #333;
+}

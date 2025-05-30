@@ -15,8 +15,6 @@ export default function EditorPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const noteId = searchParams.get("id");
-  const noteType = searchParams.get("type") || "docs";
-  const parentFolderId = searchParams.get("parentFolderId") || null;
 
   const [note, setNote] = useState<Note | null>(null);
   const [color, setColor] = useState<string>("#ffffff");
