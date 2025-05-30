@@ -234,7 +234,7 @@ const searchContent = asyncHandler(
                 _id: result._id,
                 userId: result.userId,
                 title: result.title,
-                body: result.body,
+                // body: result.body,
                 hex_color: result.hex_color,
                 parentFolderId: result.parentFolderId,
                 tags: result.tags,
