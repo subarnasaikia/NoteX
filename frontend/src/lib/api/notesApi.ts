@@ -41,7 +41,9 @@ export const deleteContentById = async (contentId: string) => {
   return response.data;
 };
 
-export const searchContent = async (query: string) => {
-  const response = await apiClient.post("/notes/search-content/", { query });
+export const searchContent = async (query: {
+  query: string;
+}) => {
+  const response = await apiClient.post("/notes/contents/search-content", query);
   return response.data;
 };

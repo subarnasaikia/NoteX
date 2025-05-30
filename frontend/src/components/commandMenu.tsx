@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react"; // spinner icon
+import { searchContent } from "@/lib/api/notesApi";
 
 type SearchResult = {
   _id: string;
@@ -44,16 +45,10 @@ export function CommandMenu() {
       if (query.trim().length < 2) return;
       setLoading(true);
       try {
-        const res = await fetch("/api/search-content", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ query }),
-        });
+        const res = await searchContent({query});
 
-        const data = await res.json();
-        setResults(data.data || []);
+        // const data = await res.json();
+        setResults(res.data || []);
       } catch (err) {
         console.error("Search failed", err);
       } finally {
