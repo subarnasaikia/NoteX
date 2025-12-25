@@ -48,7 +48,11 @@ export function CommandMenu() {
         const res = await searchContent({query});
 
         // const data = await res.json();
+
+        console.log("Search results:", res.data);
         setResults(res.data || []);
+                console.log("Search results:", results);
+
       } catch (err) {
         console.error("Search failed", err);
       } finally {
@@ -67,31 +71,32 @@ export function CommandMenu() {
         value={query}
         onValueChange={setQuery}
       />
-      <CommandList>
-        {loading && (
-          <div className="flex justify-center py-4">
-            <Loader2 className="animate-spin h-5 w-5 text-muted-foreground" />
-          </div>
-        )}
-        <CommandEmpty>No results found.</CommandEmpty>
-        {!loading && (
-          <CommandGroup heading="Search Results">
-            {results.map((item) => (
-              <CommandItem
-                key={item._id}
-                onSelect={() => {
-                  router.push(
-                    `/editor?id=${item._id}&type=markdown&parentFolderId=${item.parentFolderId ?? ""}`
-                  );
-                  setOpen(false);
-                }}
-              >
-                {item.title}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        )}
-      </CommandList>
+<CommandList className="max-h-[300px] overflow-y-auto">
+  {loading && (
+    <div className="flex justify-center py-4">
+      <Loader2 className="animate-spin h-5 w-5 text-muted-foreground" />
+    </div>
+  )}
+  <CommandEmpty>No results found.</CommandEmpty>
+  {!loading && (
+    <CommandGroup heading="Search Results">
+      {results.map((item) => (
+        <CommandItem
+          key={item._id}
+          onSelect={() => {
+            router.push(
+              `/editor?id=${item._id}&type=markdown&parentFolderId=${item.parentFolderId ?? ""}`
+            );
+            setOpen(false);
+          }}
+        >
+          {item.title}
+        </CommandItem>
+      ))}
+    </CommandGroup>
+  )}
+</CommandList>
+
     </CommandDialog>
   );
 }
