@@ -48,11 +48,7 @@ export function CommandMenu() {
         const res = await searchContent({query});
 
         // const data = await res.json();
-
-        console.log("Search results:", res.data);
         setResults(res.data || []);
-                console.log("Search results:", results);
-
       } catch (err) {
         console.error("Search failed", err);
       } finally {
@@ -96,7 +92,6 @@ export function CommandMenu() {
     </CommandGroup>
   )}
 </CommandList>
-
     </CommandDialog>
   );
 }
